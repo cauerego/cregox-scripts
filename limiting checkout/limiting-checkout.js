@@ -1,6 +1,6 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
 
-<script made-for="limiting checkout">
+<script name="limiting checkout" author="cregox.com">
   // if this list is empty, it will limit checkout for minTotal on the whole subtotal
   // values must be the precise HREF under the item on checkout
   var preSelectedItems = ['/shop/fourty-two', '/shop/ninety-one'];
