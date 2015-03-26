@@ -20,16 +20,18 @@
       var total = 0;
       if (preSelectedItems && preSelectedItems.length > 0) {
         $.each(preSelectedItems, function(index, value){
-          total += parseFloat($('div.cart-container .item-desc a[href="'+value+'"]').parents('tr').find('span.sqs-money-native').text());
+          var addToTotal = $('div.cart-container .item-desc a[href="'+value+'"]').parents('tr').find('span.sqs-money-native').text();
+          if ( addToTotal && !isNaN(parseFloat(addToTotal)) && isFinite(addToTotal) ) {
+            total += parseFloat(addToTotal);
+          }
         });
       } else {
-        total = $('div.subtotal span.sqs-money-native').text().replace('"', '');
+        total = parseFloat($('div.subtotal span.sqs-money-native').text());
       }
-      total = parseFloat(total).toFixed(2);
       if (total > parseFloat(minTotal)) {
         checkout.trigger('click');
       } else {
-        var warning = $('<div class="sqs-widgets-confirmation-content clear"><div class="title">Unable to Checkout</div><div class="message">'+ warningMessage.replace('%total%', total) +'</div><div class="buttons"><div class="confirmation-button no-frame confirm" tabindex="3">Okay</div></div></div>').appendTo(checkout.parent().parent());
+        var warning = $('<div class="sqs-widgets-confirmation-content clear"><div class="title">Unable to Checkout</div><div class="message">'+ warningMessage.replace('%total%', total.toFixed(2)) +'</div><div class="buttons"><div class="confirmation-button no-frame confirm" tabindex="3">Okay</div></div></div>').appendTo(checkout.parent().parent());
         warning.css({'position':'absolute','right':'0px','width':'300px'});
         warning.ready(function(){
           warning.fadeIn('slow');
