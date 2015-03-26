@@ -28,7 +28,7 @@
       } else {
         total = parseFloat($('div.subtotal span.sqs-money-native').text());
       }
-      if (total > parseFloat(minTotal)) {
+      if (total == 0 || total > parseFloat(minTotal)) {
         checkout.trigger('click');
       } else {
         var warning = $('<div class="sqs-widgets-confirmation-content clear"><div class="title">Unable to Checkout</div><div class="message">'+ warningMessage.replace('%total%', total.toFixed(2)) +'</div><div class="buttons"><div class="confirmation-button no-frame confirm" tabindex="3">Okay</div></div></div>').appendTo(checkout.parent().parent());
