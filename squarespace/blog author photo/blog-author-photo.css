@@ -1,0 +1,48 @@
+article.photo-added {
+  h3 {
+    margin-top: 1em;
+  }
+  header span.article-byline {
+    display: block;
+    .author {
+      a {
+        font-size: 22px;
+        color: #29CC71;
+      }
+      .bio {
+        font-size: 18px;
+      }
+      img {
+        float: left;
+        height: 50px;
+      }
+    }
+  }
+  .post .excerpt-thumb.big-thumb {
+    float: initial;
+    width: 100%;
+    * {
+      position: initial !important;
+      padding-bottom: 0 !important;
+    }
+    img {
+      width: 100% !important;
+      height: initial !important;
+    }
+  }
+  .shareaholic-canvas:before {
+      padding: 13px;
+  }
+  .shareaholic-canvas {
+    display: -webkit-box;
+    .shareaholic-share-buttons-container.wrapped .shareaholic-ui {
+      display: block;
+      ul.shareaholic-share-buttons {
+        margin-bottom: 0 !important;
+      }
+    }
+  }
+  footer {
+    display: none;
+  }
+}
