@@ -2,12 +2,15 @@ article.photo-added {
   h3 {
     margin-top: 1em;
   }
-  footer {
-    margin-bottom: 1em;
+  footer span.article-byline .author {
+    display: none;
+  }
+  header {
     a {
       vertical-align: top;
     }
     span.article-byline {
+      display: block;
       .author {
         a {
           white-space: nowrap;
