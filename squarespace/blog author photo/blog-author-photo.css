@@ -3,12 +3,14 @@ article.photo-added {
     margin-top: 1em;
   }
   footer {
+    margin-bottom: 1em;
     a {
       vertical-align: top;
     }
     span.article-byline {
       .author {
         a {
+          white-space: nowrap;
           img {
             padding-right: 0.5em;
           }
