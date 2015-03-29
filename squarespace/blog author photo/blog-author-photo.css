@@ -2,18 +2,27 @@ article.photo-added {
   h3 {
     margin-top: 1em;
   }
-  footer span.article-byline {
-    .author {
-      a {
-        font-size: 22px;
-        color: #29CC71;
-      }
-      .bio {
-        font-size: 18px;
-      }
-      img {
-        float: left;
-        height: 50px;
+  footer {
+    a {
+      vertical-align: top;
+    }
+    span.article-byline {
+      .author {
+        a {
+          .icon-user {
+            display: none;
+          }
+          display: inline-block;
+          font-size: 22px;
+          color: #29CC71;
+        }
+        .bio {
+          font-size: 18px;
+        }
+        img {
+          float: left;
+          height: 50px;
+        }
       }
     }
   }
