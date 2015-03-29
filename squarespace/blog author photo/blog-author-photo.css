@@ -9,6 +9,9 @@ article.photo-added {
     span.article-byline {
       .author {
         a {
+          img {
+            padding-right: 0.5em;
+          }
           .icon-user {
             display: none;
           }
