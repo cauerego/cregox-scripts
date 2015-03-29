@@ -2,8 +2,7 @@ article.photo-added {
   h3 {
     margin-top: 1em;
   }
-  header span.article-byline {
-    display: block;
+  footer span.article-byline {
     .author {
       a {
         font-size: 22px;
@@ -41,8 +40,5 @@ article.photo-added {
         margin-bottom: 0 !important;
       }
     }
-  }
-  footer {
-    display: none;
   }
 }

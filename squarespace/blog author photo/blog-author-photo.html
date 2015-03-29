@@ -33,7 +33,7 @@
           for (var i = 0; i < d.items.length; i++) {
             var imgString = '<img class="avatar" src="'+ d.items[i].author['avatarAssetUrl'] +'">';
             var bioString = '<div class="bio">'+ d.items[i].author['bio'] +'</div>';
-            Y.one('article#article-'+ d.items[i].id +' span.author a').prepend(imgString).append(bioString);
+            Y.one('article#article-'+ d.items[i].id +' footer span.author a').prepend(imgString).append(bioString);
           }
         }
       }
