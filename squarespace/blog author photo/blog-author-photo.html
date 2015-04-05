@@ -1,16 +1,24 @@
 <script name="blog author photo" author="cregox.com">
   // this must be applied to: blog page > advanced > page header code injection
-
+  
   $(document).ready(function(){
     $('article').addClass('photo-added');
-    $('.content-wrapper .post').each(function(){
+    $('article .content-wrapper .post').each(function(){
       var $thumb = $(this).find('.excerpt-thumb').addClass('big-thumb');
-      $thumb.parent().prepend($thumb);
+      if ($thumb && $thumb.length > 0) { // blog index
+        $thumb.parent().prepend($thumb);
+      } else { // blog post
+        $thumb = $(this).find('.sqs-block-image');
+        $(this).find('header').prepend($thumb);
+      }
       var imgSrc = $thumb.find('img').attr('src');
       imgSrc = imgSrc.split('?')[0] + '?format=900w';
       $thumb.find('img').attr('src', imgSrc);
       
-      var $h3 = $(this).find('.body.entry-content>h3')
+      var $h3 = $(this).find('.body.entry-content>h3');
+      if (!$h3.length) { // blog post
+        $h3 = $(this).find('.sqs-block-content>h3')
+      }
       if ($h3.length) {
         $h3.insertAfter($(this).find('header h1'));
       }
@@ -20,22 +28,30 @@
     });
   });
   
+  var yjson; // mostly for debugging
   function ajaxRequest () {
     Y.io('?format=json', {
       on: {
-        success: function (x, o) {
+        success: function (x, out) {
           var parsedResponse;
           try {
-            d = Y.JSON.parse(o.responseText);
-          } catch (e) {
+            yjson = Y.JSON.parse(out.responseText);
+          } catch (err) {
             console.log("JSON Parse failed!");
             return;
           }
-          for (var i = 0; i < d.items.length; i++) {
-            var imgString = '<img class="avatar" src="'+ d.items[i].author['avatarAssetUrl'] +'">';
-            var bioString = '<div class="bio">'+ d.items[i].author['bio'] +'</div>';
-            Y.one('article#article-'+ d.items[i].id +' header span.author a').prepend(imgString).append(bioString);
+          var jsonBlog;
+          if (yjson.items) { // blog index
+            jsonBlog = yjson.items;
+          } else { // blog post
+            jsonBlog = [yjson.item];
           }
+          $.each(jsonBlog, function(){
+            var jsonPost = $(this)[0];
+            var imgString = '<img class="avatar" src="'+ jsonPost.author['avatarAssetUrl'] +'">';
+            var bioString = '<div class="bio">'+ jsonPost.author['bio'] +'</div>';
+            Y.one('article#article-'+ jsonPost.id +' header span.author a').prepend(imgString).append(bioString);
+          });
         }
       }
     });
