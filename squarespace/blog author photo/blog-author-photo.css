@@ -34,6 +34,9 @@ article.photo-added {
       }
     }
   }
+  .post header .big-thumb {
+    width: 100%;
+  }
   .post .excerpt-thumb.big-thumb {
     float: initial;
     width: 100%;

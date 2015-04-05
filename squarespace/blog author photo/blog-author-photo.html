@@ -7,13 +7,10 @@
       var $thumb = $(this).find('.excerpt-thumb').addClass('big-thumb');
       if ($thumb && $thumb.length > 0) { // blog index
         $thumb.parent().prepend($thumb);
-      } else { // blog post
-        $thumb = $(this).find('.sqs-block-image');
-        $(this).find('header').prepend($thumb);
+        var imgSrc = $thumb.find('img').attr('src');
+        imgSrc = imgSrc.split('?')[0] + '?format=900w';
+        $thumb.find('img').attr('src', imgSrc);
       }
-      var imgSrc = $thumb.find('img').attr('src');
-      imgSrc = imgSrc.split('?')[0] + '?format=900w';
-      $thumb.find('img').attr('src', imgSrc);
       
       var $h3 = $(this).find('.body.entry-content>h3');
       if (!$h3.length) { // blog post
@@ -45,6 +42,8 @@
             jsonBlog = yjson.items;
           } else { // blog post
             jsonBlog = [yjson.item];
+            var thumbString = '<img class="big-thumb" src="'+ yjson.item.assetUrl +'">';
+            Y.one('article#article-'+ yjson.item.id +' header').prepend(thumbString);
           }
           $.each(jsonBlog, function(){
             var jsonPost = $(this)[0];
