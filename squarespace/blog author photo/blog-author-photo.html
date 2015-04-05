@@ -1,4 +1,6 @@
 <script name="blog author photo" author="cregox.com">
+  // this must be applied to: blog page > advanced > page header code injection
+
   $(document).ready(function(){
     $('article').addClass('photo-added');
     $('.content-wrapper .post').each(function(){
@@ -19,7 +21,7 @@
   });
   
   function ajaxRequest () {
-    Y.io('/test?format=json', {
+    Y.io('?format=json', {
       on: {
         success: function (x, o) {
           var parsedResponse;
