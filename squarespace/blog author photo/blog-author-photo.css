@@ -37,6 +37,7 @@ article.photo-added {
   .post .excerpt-thumb.big-thumb {
     float: initial;
     width: 100%;
+    max-width: initial;
     * {
       position: initial !important;
       padding-bottom: 0 !important;
