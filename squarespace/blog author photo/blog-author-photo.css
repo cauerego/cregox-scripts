@@ -1,15 +1,24 @@
 article.photo-added {
   h3 {
     margin-top: 1em;
+    margin-bottom: 20px;
   }
-  footer span.article-byline .author {
-    display: none;
+  footer {
+    margin-top: 10px;
+    span.article-byline {
+      margin-bottom: 10px;
+      .author {
+        display: none;
+      }
+    }
   }
   header {
+    margin-bottom: 0;
     a {
       vertical-align: top;
     }
     span.article-byline {
+      margin-bottom: 10px;
       display: block;
       .author {
         a {
@@ -33,13 +42,18 @@ article.photo-added {
         }
       }
     }
+    h1 {
+      margin-bottom: 20px;
+    }
   }
-  .post header .big-thumb {
+  div.body>p {
+    margin-top: 0;
+    margin-bottom: 10px;
+  }
+  .post .big-thumb {
+    margin-bottom: 25px;
     width: 100%;
-  }
-  .post .excerpt-thumb.big-thumb {
     float: initial;
-    width: 100%;
     max-width: initial;
     * {
       position: initial !important;
@@ -55,6 +69,7 @@ article.photo-added {
   }
   .shareaholic-canvas {
     display: -webkit-box;
+    margin-bottom: 10px;
     .shareaholic-share-buttons-container.wrapped .shareaholic-ui {
       display: block;
       ul.shareaholic-share-buttons {
