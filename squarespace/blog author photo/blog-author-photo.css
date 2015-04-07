@@ -1,6 +1,6 @@
 article.photo-added {
   h3 {
-    margin-top: 1em;
+    margin-top: .5em;
     margin-bottom: 20px;
   }
   footer {
@@ -35,6 +35,7 @@ article.photo-added {
         }
         .bio {
           font-size: 18px;
+          color: #414548 
         }
         img {
           float: left;
