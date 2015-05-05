@@ -1,0 +1,23 @@
+<script name="typed animate text - next h3" author="cregox.com">
+  // this will animate the next H3 element found
+  
+  $(document).ready(function(){
+    var $originalText = $('.sqs-block-content').findNext('h3');
+    $originalText.hide();
+    $('<h3>')
+     .addClass($originalText.attr('class'))
+     .appendTo($originalText.parent())
+     .typed({
+      strings: $originalText.find('span').map(function(){ return $(this).html(); })
+      , typeSpeed: 20
+      , backDelay: 200
+      , loop: true
+      , loopCount: false
+//      , callback: function(){ hideCursor(); }
+    });
+    hideCursor();
+  });
+  function hideCursor () {
+    $('.sqs-block-content span.typed-cursor').hide();
+  }
+</script>
