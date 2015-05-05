@@ -1,0 +1,15 @@
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+
+<script name="load thumbnail banner video" author="cregox.com">
+  $(window).load(AutoClickVideoBanner);
+  $(window).resize(AutoClickVideoBanner);
+  
+  function AutoClickVideoBanner () {
+    var $videoBannerImg = $('main#page #content #video-section #video-gallery .video-fill img');
+    if ($videoBannerImg.css('display') === 'none') {
+      $videoBannerImg.click();
+    } else {
+      // there's probably no need to remove click
+    }
+  }
+</script>

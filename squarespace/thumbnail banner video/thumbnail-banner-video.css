@@ -1,0 +1,25 @@
+// load thumbnail banner video by cregox.com
+@media screen {
+  main#page #content #video-section #video-gallery {
+    .sqs-video-overlay div {
+      display: none;
+    }
+    @media (min-width: 751px) {
+      iframe {
+        display: block;
+      }
+      img {
+        display: none;
+      }
+    }
+    @media (max-width: 750px) {
+      iframe {
+        display: none;
+      }
+      img {
+        display: block;
+      }
+    }
+  }
+}
+
