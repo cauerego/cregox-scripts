@@ -6,6 +6,7 @@
     $originalText.hide();
     $('<h3>')
      .addClass($originalText.attr('class'))
+     .height(1) // maybe not the best solution, but it works
      .appendTo($originalText.parent())
      .typed({
       strings: $originalText.find('span').map(function(){ return $(this).html(); })
