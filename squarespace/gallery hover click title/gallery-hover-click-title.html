@@ -9,11 +9,11 @@
 <script id="gallery-hover-click-title" author="cregox.com">
   var $galleryClickVisible = null;
   $(document).ready(function(){
-    var $titleGallery = $('script#gallery-hover-click-title').hide().findNext('.sqs-block-gallery .sqs-gallery');
+    var $titleGallery = $('script#gallery-hover-click-title').hide().below('.sqs-block-gallery .sqs-gallery');
     var $galleryStyle = $('span#gallery-hover-click-styles');
     $titleGallery.children('.image-wrapper').each(function(){
       var $image = $(this);
-      var $meta = $(this).findNext('.meta');
+      var $meta = $(this).below('.meta');
       var $bigImage = $('<img src="'+ $image.find('img').attr('src') +'">');
       
       var nameId = $meta.find('h3.meta-title').text();
@@ -67,14 +67,14 @@
   });
   
 (function( $ ){
- $.fn.findNext = function(sel) {
+ $.fn.below = function(sel) {
    var $result = $(sel).first();
    if ($result.length <= 0) {
      return $result;
    }
    $result = [];
    var thisIndex = $('*').index($(this));
-   var selIndex = Number.MAX_SAFE_INTEGER;
+   var selIndex = Number.MAX_VALUE; // Number.MAX_SAFE_INTEGER is not yet fully supported
    $(sel).each(function(i,val){
      var valIndex = $('*').index($(val));
      if (thisIndex < valIndex && valIndex < selIndex) {
