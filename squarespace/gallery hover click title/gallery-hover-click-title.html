@@ -23,10 +23,6 @@
       var $galClick = $thisGallery.find('div.click').text("").append($image).append($meta);
       var $galHover = $thisGallery.find('div.hover').text("").append($bigImage);
       
-      // no idea why it's lost
-//      $galHover.find('img').attr('src', $galClick.find('img').attr('src'));
-//      console.log($galClick.find('img').attr('src'));
-      
       var $pId = $thisGallery.find('p.gallery-hover-title');
       $pId.text(nameId);
       
