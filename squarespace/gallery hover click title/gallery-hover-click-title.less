@@ -1,0 +1,45 @@
+// gallery hover click title by cregox.com
+span#gallery-hover-click-styles {
+  &.remove-self {
+    display: none;
+  }
+  .list {}
+  .hover, .click {
+    z-index: 50;
+    display: none;
+    position: absolute;
+    background-color: white;
+    width: 100%;
+    padding: 10px;
+    .meta {
+      color: black;
+      h3 {
+        color: black;
+        font-size: 16px;
+        font-weight: bold;
+        text-transform: none;
+      }
+    }
+    img {
+      width: initial;
+      height: initial;
+    }
+  }
+  .hover {
+    height: 450px;
+    width: initial;
+    img {
+      width: initial;
+      height: 100%;
+    }
+  }
+  .click {
+    height: 200px;
+    img {
+      float: left;
+      padding-right: 10px;
+      max-width: 50%;
+      max-height: 200px;
+    }
+  }
+}

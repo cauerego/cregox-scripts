@@ -1,0 +1,92 @@
+<span id="gallery-hover-click-styles" class="remove-self">
+  <div class="list">
+    <p class="text-align-center gallery-hover-title"></p>
+  </div>
+  <div class="hover"></div>
+  <div class="click"></div>
+</span>
+
+<script id="gallery-hover-click-title" author="cregox.com">
+  var $galleryClickVisible = null;
+  $(document).ready(function(){
+    var $titleGallery = $('script#gallery-hover-click-title').hide().findNext('.sqs-block-gallery .sqs-gallery');
+    var $galleryStyle = $('span#gallery-hover-click-styles');
+    $titleGallery.children('.image-wrapper').each(function(){
+      var $image = $(this);
+      var $meta = $(this).findNext('.meta');
+      var $bigImage = $('<img src="'+ $image.find('img').attr('src') +'">');
+      
+      var nameId = $meta.find('h3.meta-title').text();
+      
+      var $thisGallery = $galleryStyle.clone().insertBefore($image.parents('.sqs-block-content')).removeClass('remove-self');
+      
+      var $galClick = $thisGallery.find('div.click').text("").append($image).append($meta);
+      var $galHover = $thisGallery.find('div.hover').text("").append($bigImage);
+      
+      // no idea why it's lost
+//      $galHover.find('img').attr('src', $galClick.find('img').attr('src'));
+//      console.log($galClick.find('img').attr('src'));
+      
+      var $pId = $thisGallery.find('p.gallery-hover-title');
+      $pId.text(nameId);
+      
+      $pId.click(function(){
+		if ($galleryClickVisible !== null) {
+		   $galleryClickVisible.hide('fast');
+		   $galleryClickVisible = null;
+		}
+        if ( $galHover.is(':visible') ) {
+          $galHover.hide();
+          $galClick.show('fast');
+          $galleryClickVisible = $galClick;
+        } else if ( $galClick.is(':visible') ) {
+          $galClick.hide('fast');
+          $galleryClickVisible = null;
+        } else {
+          $galHover.toggle('fast');
+        }
+      });
+      $galClick.click(function(){
+        $galClick.hide('fast');
+        $galleryClickVisible = null;
+      });
+      $galHover.click(function(){
+        $galHover.hide();
+        $galClick.show('fast');
+		if ($galleryClickVisible !== null) {
+		   $galleryClickVisible.hide('fast');
+		}
+        $galleryClickVisible = $galClick;
+      });
+      
+      $pId.hover(function(){
+        if ($galleryClickVisible === null) {
+          $galHover.show('fast');
+        }
+      }, function(){
+        $galHover.hide('fast');
+      });
+    });
+    
+  });
+  
+(function( $ ){
+ $.fn.findNext = function(sel) {
+   var $result = $(sel).first();
+   if ($result.length <= 0) {
+     return $result;
+   }
+   $result = [];
+   var thisIndex = $('*').index($(this));
+   var selIndex = Number.MAX_SAFE_INTEGER;
+   $(sel).each(function(i,val){
+     var valIndex = $('*').index($(val));
+     if (thisIndex < valIndex && valIndex < selIndex) {
+       selIndex = valIndex;
+       $result = $(val);
+     }
+   });
+   return $result;
+ }; 
+})( jQuery );
+</script>
