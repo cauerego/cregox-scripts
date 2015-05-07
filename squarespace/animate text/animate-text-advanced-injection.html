@@ -7,7 +7,7 @@
    }
    $result = [];
    var thisIndex = $('*').index($(this));
-   var selIndex = Number.MAX_SAFE_INTEGER;
+   var selIndex = Number.MAX_VALUE; // Number.MAX_SAFE_INTEGER is not yet fully supported
    $(sel).each(function(i,val){
      var valIndex = $('*').index($(val));
      if (thisIndex < valIndex && valIndex < selIndex) {
