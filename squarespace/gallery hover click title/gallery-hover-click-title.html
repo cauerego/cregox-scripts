@@ -1,14 +1,26 @@
+<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
 <span id="gallery-hover-click-styles" class="remove-self">
   <div class="list">
     <p class="text-align-center gallery-hover-title"></p>
   </div>
-  <div class="hover"></div>
-  <div class="click"></div>
+  <div class="hover">
+    <span class="fa-stack fa-lg">
+      <i class="fa fa-square fa-stack-2x"></i>
+      <i class="fa fa-search fa-stack-1x fa-inverse"></i>
+    </span>
+  </div>
+  <div class="click">
+    <span class="fa-stack fa-lg">
+      <i class="fa fa-square fa-stack-2x"></i>
+      <i class="fa fa-times fa-stack-1x fa-inverse"></i>
+    </span>
+  </div>
 </span>
 
 <script id="gallery-hover-click-title" author="cregox.com">
   var $galleryClickVisible = null;
-  $(document).ready(function(){
+  $(window).load(function(){
     var $titleGallery = $('script#gallery-hover-click-title').hide().below('.sqs-block-gallery .sqs-gallery');
     var $galleryStyle = $('span#gallery-hover-click-styles');
     $titleGallery.children('.image-wrapper').each(function(){
@@ -20,8 +32,8 @@
       
       var $thisGallery = $galleryStyle.clone().insertBefore($image.parents('.sqs-block-content')).removeClass('remove-self');
       
-      var $galClick = $thisGallery.find('div.click').text("").append($image).append($meta);
-      var $galHover = $thisGallery.find('div.hover').text("").append($bigImage);
+      var $galClick = $thisGallery.find('div.click').prepend($image).append($meta);
+      var $galHover = $thisGallery.find('div.hover').prepend($bigImage);
       
       var $pId = $thisGallery.find('p.gallery-hover-title');
       $pId.text(nameId);
