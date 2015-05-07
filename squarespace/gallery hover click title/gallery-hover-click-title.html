@@ -1,5 +1,6 @@
 <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
 
+<span id="gallery-background-overlay"></span>
 <span id="gallery-hover-click-styles" class="remove-self">
   <div class="list">
     <p class="text-align-center gallery-hover-title"></p>
@@ -20,59 +21,89 @@
 
 <script id="gallery-hover-click-title" author="cregox.com">
   var $galleryClickVisible = null;
+  var $galleryHoverVisible = null;
   $(window).load(function(){
     var $titleGallery = $('script#gallery-hover-click-title').hide().below('.sqs-block-gallery .sqs-gallery');
     var $galleryStyle = $('span#gallery-hover-click-styles');
+
+    var $bgOver = $('#gallery-background-overlay');
+    $bgOver.click(function(){
+      if ($galleryClickVisible !== null) {
+        $galleryClickVisible.hide('fast');
+        $galleryClickVisible = null;
+      }
+      if ($galleryHoverVisible !== null) {
+        $galleryHoverVisible.hide('fast');
+        $galleryHoverVisible = null;
+      }
+      $bgOver.hide();
+    });
+    $bgOver.hide();
+
     $titleGallery.children('.image-wrapper').each(function(){
       var $image = $(this);
       var $meta = $(this).below('.meta');
       var $bigImage = $('<img src="'+ $image.find('img').attr('src') +'">');
-      
+
       var nameId = $meta.find('h3.meta-title').text();
-      
+
       var $thisGallery = $galleryStyle.clone().insertBefore($image.parents('.sqs-block-content')).removeClass('remove-self');
-      
+
       var $galClick = $thisGallery.find('div.click').prepend($image).append($meta);
       var $galHover = $thisGallery.find('div.hover').prepend($bigImage);
-      
+
       var $pId = $thisGallery.find('p.gallery-hover-title');
       $pId.text(nameId);
-      
+
       $pId.click(function(){
-		if ($galleryClickVisible !== null) {
-		   $galleryClickVisible.hide('fast');
-		   $galleryClickVisible = null;
-		}
+        if ($galleryClickVisible !== null) {
+          $galleryClickVisible.hide('fast');
+          $galleryClickVisible = null;
+          $bgOver.hide();
+        }
         if ( $galHover.is(':visible') ) {
-          $galHover.hide();
+          $galHover.hide('fast');
+          $galleryHoverVisible = null;
           $galClick.show('fast');
           $galleryClickVisible = $galClick;
+          $bgOver.show();
         } else if ( $galClick.is(':visible') ) {
           $galClick.hide('fast');
           $galleryClickVisible = null;
+          $bgOver.hide();
         } else {
-          $galHover.toggle('fast');
+          $galHover.show('fast');
+          $galleryHoverVisible = $galHover;
+          $bgOver.show();
         }
       });
       $galClick.click(function(){
         $galClick.hide('fast');
         $galleryClickVisible = null;
+        $bgOver.hide();
       });
       $galHover.click(function(){
-        $galHover.hide();
-        $galClick.show('fast');
-		if ($galleryClickVisible !== null) {
-		   $galleryClickVisible.hide('fast');
-		}
-        $galleryClickVisible = $galClick;
-      });
-      
-      $pId.hover(function(){
-        if ($galleryClickVisible === null) {
-          $galHover.show('fast');
-        }
-      }, function(){
         $galHover.hide('fast');
+        $galleryHoverVisible = null;
+        $galClick.show('fast');
+        if ($galleryClickVisible !== null) {
+          $galleryClickVisible.hide('fast');
+          $galleryClickVisible = null;
+        }
+        $galleryClickVisible = $galClick;
+        $bgOver.show();
+      });
+
+      $pId.mouseenter(function(){
+        if ($galleryClickVisible === null) {
+          if ($galleryHoverVisible !== null) {
+            $galleryHoverVisible.hide('fast');
+            $galleryHoverVisible = null;
+          }
+          $galHover.show('fast');
+          $galleryHoverVisible = $galHover;
+          $bgOver.show();
+        }
       });
     });
     
