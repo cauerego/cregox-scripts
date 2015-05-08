@@ -1,0 +1,21 @@
+<script name="typed animate text jQuery below" author="cregox.com">
+(function( $ ){
+ $.fn.findNext = function(sel) {
+   var $result = $(sel).first();
+   if ($result.length <= 0) {
+     return $result;
+   }
+   $result = [];
+   var thisIndex = $('*').index($(this));
+   var selIndex = Number.MAX_VALUE; // Number.MAX_SAFE_INTEGER is not yet fully supported
+   $(sel).each(function(i,val){
+     var valIndex = $('*').index($(val));
+     if (thisIndex < valIndex && valIndex < selIndex) {
+       selIndex = valIndex;
+       $result = $(val);
+     }
+   });
+   return $result;
+ }; 
+})( jQuery );
+</style>
