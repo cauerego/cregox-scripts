@@ -4,7 +4,7 @@
   $(document).ready(function(){
     var $originalText = $('.sqs-block-content').findNext('h3');
     $originalText.hide();
-    $('<h3>')
+    $('<h3 id="animated">')
      .addClass($originalText.attr('class'))
      .height(1) // maybe not the best solution, but it works
      .appendTo($originalText.parent())
@@ -17,6 +17,26 @@
       , loop: true
       , loopCount: false
     });
-    $('.sqs-block-content span.typed-cursor').hide();
+    $('.sqs-block-content span.typed-cursor').remove();
   });
 </script>
+<style>
+h3#animated:after {
+  visibility: visible;
+  content: '';
+  background-color: white;
+  display: inline-block;
+  position: relative;
+  width: 0.5em;
+  height: 1em;
+  top: 5px;
+  margin-left: 0;
+  opacity: 1;
+  font-weight: 100;
+  -webkit-animation: blink 0.7s infinite;
+  -moz-animation: blink 0.7s infinite;
+  -ms-animation: blink 0.7s infinite;
+  -o-animation: blink 0.7s infinite;
+  animation: blink 0.7s infinite;
+}
+</style>
