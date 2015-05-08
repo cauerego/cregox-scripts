@@ -28,36 +28,38 @@ span#gallery-hover-click-styles {
     display: none;
     position: absolute;
     background-color: white;
-    width: 100%;
+    width: auto;
+    max-width: 100%;
     padding: 10px;
     .meta {
       color: black;
       h3 {
         color: black;
-        font-size: 16px;
+        font-size: 16px !important;
         font-weight: bold;
         text-transform: none;
       }
     }
     img {
-      width: initial;
-      height: initial;
+      width: auto;
+      height: auto;
+      max-width: 100%;
+      max-height: 450px;
     }
   }
   .hover {
-    height: 450px;
     width: initial;
-    img {
-      width: initial;
-      height: 100%;
-    }
   }
   .click {
-    height: 200px;
+    height: auto;
+    width: auto;
+    max-width: 100%;
+    min-width: 80%;
     img {
       float: left;
       padding-right: 10px;
-      max-width: 50%;
+      max-width: 40%;
+      width: auto;
       max-height: 200px;
     }
   }
