@@ -47,7 +47,7 @@
     $titleGallery.children('.image-wrapper').each(function(){
       var $image = $(this);
       var $meta = $(this).below('.meta');
-      var $bigImage = $('<img src="'+ $image.find('img').attr('src') +'">');
+      var $bigImage = $('<img src="'+ $image.find('img').attr('data-src') +'?format=500w">');
 
       var nameId = $meta.find('h3.meta-title').text();
 
