@@ -9,7 +9,9 @@
      .height(1) // maybe not the best solution, but it works
      .appendTo($originalText.parent())
      .typed({
-      strings: $originalText.find('span').map(function(){ return $(this).html(); })
+      strings: $originalText.find('span').map(function(){
+        return $(this).html().replace('&nbsp;', ' '); // this "replace" is a hack fix for typed
+      })
       , typeSpeed: 20
       , backDelay: 200
       , loop: true
