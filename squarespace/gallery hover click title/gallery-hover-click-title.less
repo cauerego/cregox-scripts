@@ -1,6 +1,9 @@
 // gallery hover click title by cregox.com
+div.sqs-block-gallery {
+  z-index: 1;
+}
 span#gallery-background-overlay {
-  z-index: 0;
+  z-index: 1;
   position: fixed;
   top: 0;
   left: 0;
@@ -22,7 +25,9 @@ span#gallery-hover-click-styles {
   .gallery-hover-title {
     cursor: pointer;
   }
-  .list {}
+  .list {
+    z-index: 2;
+  }
   .hover, .click {
     z-index: 50;
     display: none;
