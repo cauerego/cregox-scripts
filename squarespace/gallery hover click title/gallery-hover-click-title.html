@@ -1,4 +1,9 @@
 <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+<style>
+  .sqs-gallery-container {
+    display: none;
+  }
+</style>
 
 <span id="gallery-background-overlay"></span>
 <span id="gallery-hover-click-styles" class="remove-self">
@@ -23,7 +28,7 @@
   var $galleryClickVisible = null;
   var $galleryHoverVisible = null;
   $(window).load(function(){
-    var $titleGallery = $('script#gallery-hover-click-title').hide().below('.sqs-block-gallery .sqs-gallery');
+    var $titleGallery = $('script#gallery-hover-click-title').below('.sqs-block-gallery .sqs-gallery');
     var $galleryStyle = $('span#gallery-hover-click-styles');
 
     var $bgOver = $('#gallery-background-overlay');
@@ -105,7 +110,10 @@
           $bgOver.show();
         }
       });
-    });
+    }); // each
+    
+    // after everything is done here, it might be a good idea to show what have been previously hidden by css, just in case
+    $('.sqs-gallery-container').show();
     
   });
   
