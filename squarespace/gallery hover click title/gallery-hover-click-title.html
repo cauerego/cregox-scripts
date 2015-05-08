@@ -111,6 +111,13 @@
       });
     }); // each
     
+    $.fn.awesomeCursor.defaults.color = 'black';
+    $.fn.awesomeCursor.defaults.outline = 'white';
+    $.fn.awesomeCursor.defaults.hotspot = 'center';
+    $('.hover').awesomeCursor('search');
+    $('.click').awesomeCursor('times');
+    $('#gallery-background-overlay').awesomeCursor('times');
+    
     // after everything is done here, it might be a good idea to show what have been previously hidden by css, just in case
     $('.sqs-gallery-container').show();
     
