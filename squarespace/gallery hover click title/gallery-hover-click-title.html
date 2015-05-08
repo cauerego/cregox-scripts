@@ -61,26 +61,31 @@
 
       $pId.click(function(){
         if ($galleryClickVisible !== null) {
+          if ($galleryClickVisible !== $galClick) {
+            $galHover.show('fast');
+            $galleryHoverVisible = $galHover;
+          }
           $galleryClickVisible.hide('fast');
           $galleryClickVisible = null;
           $bgOver.hide();
-        }
-        if ( $galHover.is(':visible') ) {
-          $galHover.hide('fast');
-          $galleryHoverVisible = null;
-          $galClick.show('fast');
-          $galleryClickVisible = $galClick;
+        } else if ($galleryHoverVisible !== null) {
+          $galleryHoverVisible.hide('fast');
+          if ($galleryHoverVisible === $galHover) {
+            $galleryHoverVisible = null;
+            $galClick.show('fast');
+            $galleryClickVisible = $galClick;
+          } else {
+            $galHover.show('fast');
+            $galleryHoverVisible = $galHover;
+          }
           $bgOver.show();
-        } else if ( $galClick.is(':visible') ) {
-          $galClick.hide('fast');
-          $galleryClickVisible = null;
-          $bgOver.hide();
         } else {
           $galHover.show('fast');
           $galleryHoverVisible = $galHover;
           $bgOver.show();
         }
       });
+      
       $galClick.click(function(){
         $galClick.hide('fast');
         $galleryClickVisible = null;
