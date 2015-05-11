@@ -1,0 +1,82 @@
+<style>
+  /*div.yui3-lightbox2-content a.sqs-lightboxclose {
+    margin-right: 50px;
+  }
+  div.sqs-video-wrapper.video-fit div.intrinsic-inner {
+    position: inherit !important;
+  }*/
+/*  div.sqs-lightbox-slideshow {*/
+  div.sqs-lightbox-slideshow div.sqs-lightbox-padder {
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+  }
+  div.sqs-lightbox-slideshow div.sqs-video-wrapper.video-fit {
+    min-width: 100% !important;
+    min-height: 100% !important;
+    width: inherit !important;
+    height: 100% !important;
+    left: 0 !important;
+    top: inherit !important;
+  }
+</style>
+<script name="full video lightbox" author="cregox.com">
+  var videoRatio = NaN;
+  var $iframeVideo = null;
+  $(document).bind('DOMSubtreeModified',function(){
+    if ($('div.intrinsic-inner>iframe').length > 0) {
+      $iframeVideo = $('div.intrinsic-inner>iframe');
+      videoRatio = $iframeVideo.outerWidth() / $iframeVideo.outerHeight();
+      $(window).resize();
+    }
+  });
+  $(window).resize(function(){
+    if (isNaN(videoRatio)) {
+      console.log('damit');
+    }
+    var windowRatio = $(window).outerWidth() / $(window).outerHeight();
+    if (videoRatio > windowRatio) {
+      $('div.sqs-video-wrapper.video-fit div.intrinsic').css({
+        'width': $(window).outerHeight() * videoRatio
+      }).find('iframe').css({
+        'left': ( ($(window).outerWidth() / 2) - ($iframeVideo.outerWidth() / 2) )+'px'
+      });
+    } else {
+      $('div.sqs-video-wrapper.video-fit div.intrinsic').css({
+        'width': '100%'
+      }).find('iframe').css({
+        'left': 0
+      });
+    }
+/*    $('iframe div.controls-wrapper').css({
+       'height': $(window).outerHeight()
+      ,'width': '100%'
+      ,'position': 'fixed'
+    }).find('.sidedock').css({
+      'top': '50px'
+    });*/
+/*    $('div.intrinsic-inner>iframe').css({
+       'height': $(window).outerHeight()
+      ,'min-width' : '100%'
+      ,'min-height' : '100%'
+    });*/
+  });
+  
+  $(document).ready(function(){
+    $('a[href^="javascript:jqueryLightbox()"]').each(function(){
+      var $videoButton = $(this);
+      var $galleryLightbox = $videoButton.below('.sqs-block-gallery');
+      $galleryLightbox.hide();
+      $videoButton.click(function(){
+        $galleryLightbox.find('img').click();
+      });
+      $videoButton.attr('href', 'javascript:');
+      $videoButton.addClass('lightboxed');
+    });
+  });
+  
+  function jqueryLightbox () {
+    alert('jQuery not loaded');
+  }  
+</script>
