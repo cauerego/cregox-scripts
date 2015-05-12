@@ -10,7 +10,7 @@
      .appendTo($originalText.parent())
      .typed({
       strings: $originalText.find('span').map(function(){
-        return $(this).html().replace('&nbsp;', ' '); // this "replace" is a hack fix for typed
+        return $(this).html().split('&nbsp;').join(' '); // this "replace" is a hack fix for typed
       })
       , typeSpeed: 20
       , backDelay: 200
