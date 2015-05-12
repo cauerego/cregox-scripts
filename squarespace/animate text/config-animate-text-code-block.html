@@ -1,8 +1,8 @@
-<script name="config typed animate text - next h3" author="cregox.com">
+<script name="config typed animate text - next h3" author="cregox.com" id="belowHere">
   // this will animate the next H3 element found
   
   $(document).ready(function(){
-    var $originalText = $('.sqs-block-content').findNext('h3');
+    var $originalText = $('script#belowHere').findNext('h3');
     $originalText.hide();
     $('<h3 id="animated">')
      .addClass($originalText.attr('class'))
