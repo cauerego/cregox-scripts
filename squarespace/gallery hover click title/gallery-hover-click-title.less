@@ -48,17 +48,17 @@ span#gallery-hover-click-styles {
       }
     }
     img {
+      display: flex;
+      display: -webkit-flex;
+      -webkit-flex-flow: row wrap;
+      flex-flow: row wrap;
       width: 100%;
-      height: 222px;
+      height: auto;
     }
   }
   .hover {
-    display: flex;
-    display: -webkit-flex;
-    -webkit-flex-flow: row wrap;
-    flex-flow: row wrap;
-    cursor: url('magnifier52.png') 15 15, crosshair; // url might need to be updated!
     width: 100%;
+    cursor: url('magnifier52.png') 15 15, crosshair; // url might need to be updated!
   }
   .click {
     cursor: url('cross105.png') 15 15, crosshair; // url might need to be updated!
