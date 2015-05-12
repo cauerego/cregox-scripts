@@ -31,14 +31,16 @@ span#gallery-hover-click-styles {
   }
   .hover, .click {
     z-index: 50;
-    display: none;
+    display: block;
     position: absolute;
     background-color: white;
-    width: auto;
-    max-width: 100%;
-    padding: 10px;
+    width: 100%;
+    padding: 0;
     .meta {
+      width: auto;
+      max-width: 400px;
       color: black;
+      padding: 20px;
       h3 {
         color: black;
         font-size: 16px !important;
@@ -47,15 +49,15 @@ span#gallery-hover-click-styles {
       }
     }
     img {
-      width: auto;
-      height: auto;
-      max-width: 100%;
-      max-height: 450px;
+      width: 100%;
+      height: 222px;
     }
   }
   .hover {
+    display: flex;
+    display: -webkit-flex;
     cursor: url('magnifier13.png') 15 15, crosshair; // url might need to be updated!
-    width: initial;
+    width: 100%;
   }
   .click {
     cursor: url('cancel30.png') 15 15, crosshair; // url might need to be updated!
@@ -63,12 +65,5 @@ span#gallery-hover-click-styles {
     width: auto;
     max-width: 100%;
     min-width: 80%;
-    img {
-      float: left;
-      padding-right: 10px;
-      max-width: 40%;
-      width: auto;
-      max-height: 200px;
-    }
   }
 }
