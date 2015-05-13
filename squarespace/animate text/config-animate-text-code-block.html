@@ -1,23 +1,36 @@
 <script name="config typed animate text - next h3" author="cregox.com" id="belowHere">
   // this will animate the next H3 element found
   
+  var scriptId = "belowHere";
+  // if adding more than 1 of these in the same page,
+  // be sure to change both script above id's
+  // from 'belowHere' to some other unique id
+  
   $(document).ready(function(){
-    var $originalText = $('script#belowHere').findNext('h3');
+    var $originalText = $('script#' + scriptId).findNext('div.sqs-block-content');
     $originalText.hide();
+    
+    var typedStrings = undefined;
+    var mapStrings = function() {
+      // this "replace" is a hack fix for typed (which is probably not needed since markdown)
+      return $(this).html().split('&nbsp;').join(' ');
+    };
+    if ($originalText.find('h3').length ) {
+      typedStrings = $originalText.find('h3').map(mapStrings);
+    }
+    
     $('<h3 id="animated">')
      .addClass($originalText.attr('class'))
      .height(1) // maybe not the best solution, but it works
      .appendTo($originalText.parent())
      .typed({
-      strings: $originalText.find('span').map(function(){
-        return $(this).html().split('&nbsp;').join(' '); // this "replace" is a hack fix for typed
-      })
+      strings: typedStrings
       , typeSpeed: 20
       , backDelay: 200
       , loop: true
       , loopCount: false
     });
-    $('.sqs-block-content span.typed-cursor').remove();
+    $('.sqs-block-code span.typed-cursor').remove();
   });
 </script>
 <style>
