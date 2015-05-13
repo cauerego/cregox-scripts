@@ -8,16 +8,22 @@
   //
   // for more info, visit www.cregox.com/full-video
   
-  function jqueryLightbox (videoString) {
-    var $galleryLightbox = $('div[data-html*="'+ videoString +'"]').parents('.sqs-block-gallery');
-    $galleryLightbox.hide();
-    var $videoButton = $('a[href*="'+ videoString +'"]');
-    $videoButton.click(function(){
-      $galleryLightbox.find('img').click();
+  $(document).ready(function(){
+    $('a[href^="javascript:jqueryLightbox("]').each(function(){
+      var $videoButton = $(this);
+      var videoString = $videoButton.attr('href').split("('")[1].split("')")[0];
+      var $galleryLightbox = $('div[data-html*="'+ videoString +'"]');
+      $galleryLightbox.parents('.sqs-block-gallery').hide();
+      $videoButton.click(function(){
+        $galleryLightbox.find('img').click();
+      });
+      $videoButton.attr('href', 'javascript:');
+      $videoButton.addClass('lightboxed');
     });
-    $videoButton.attr('href', 'javascript:');
-    $videoButton.addClass('lightboxed');
-    $videoButton.click();
+  });
+  
+  function jqueryLightbox (videoString) {
+    alert('jQuery not loaded');
   }  
   
   var videoRatio = NaN;
