@@ -7,7 +7,7 @@
   // from 'belowHere' to some other unique id
   
   $(document).ready(function(){
-    var $originalText = $('script#' + scriptId).findNext('div.sqs-block-content');
+    var $originalText = $('script#' + scriptId).below('div.sqs-block-content');
     $originalText.hide();
     
     var typedStrings = undefined;
@@ -30,7 +30,7 @@
       , loop: true
       , loopCount: false
     });
-    $originalText.findNext('span.typed-cursor').remove();
+    $originalText.below('span.typed-cursor').remove();
   });
 </script>
 <style>
