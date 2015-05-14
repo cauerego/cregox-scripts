@@ -14,8 +14,10 @@
       var videoString = $videoButton.attr('href').split("('")[1].split("')")[0];
       var $galleryLightbox = $('div[data-html*="'+ videoString +'"]');
       $galleryLightbox.parents('.sqs-block-gallery').hide();
+      var $galleryLightboxImg = $galleryLightbox.find('img');
       $videoButton.click(function(){
-        $galleryLightbox.find('img').click();
+        $galleryLightboxImg.hide(); // as to not show them before loading video
+        $galleryLightboxImg.click();
       });
       $videoButton.attr('href', 'javascript:');
       $videoButton.addClass('lightboxed');
