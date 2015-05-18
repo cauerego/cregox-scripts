@@ -1,0 +1,114 @@
+<script name="endless scrolling" author="cregox.com">
+  // mostly based on script from foley at http://answers.squarespace.com/questions/17153/how-can-i-create-an-infinite-scroll-blog-on-the-developer-platform
+
+  Y.use('node', function() {
+  
+    // config
+    var loadingMargin = 500; //px
+    var parent = 'main#main .wrapper';
+    var post = '.summary-item';
+    
+    // private
+    var jsonCachedRequest = null;
+    var YparentToAppend;
+    var YnewItemsToClone;
+    var pageSize = 0;
+    var pageIndex = 1;
+    
+    Y.on('domready', function() {
+      YparentToAppend = Y.one(parent).one('div');
+//      YparentToAppend.one('.sqs-row').remove();
+      var execute = true;
+      var stuffBottom = Y.one(parent).get('clientHeight') + Y.one(parent).getY();
+      var urlQuery = window.location.pathname;
+      var postNumber = 99999;// Static.SQUARESPACE_CONTEXT.collection.itemCount;
+      var presentNumber = Y.all(post).size();
+      
+      YnewItemsToClone = YparentToAppend.one('.summary-item-list').cloneNode(true);
+      YnewItemsToClone.hide();
+      pageSize = YnewItemsToClone.all('.summary-item').size();
+    
+    Y.on('scroll', function()
+    {
+      if (presentNumber >= postNumber && execute === true) // ignored
+      {
+        YparentToAppend.append('<h1>There are no more posts.</h1>')
+        execute = false;
+      }
+      else
+      {
+        var spaceHeight = document.documentElement.clientHeight + window.scrollY;
+
+        // measures distance from page top to content bottom
+        // should be less than scrollY position
+        if (spaceHeight + loadingMargin >= stuffBottom && execute === true)
+        {
+          // prevents scroll listener from firing too often
+          execute = false;
+          
+          pageIndex++;
+          
+          createPage( cachedAjaxRequest() );
+
+          // Reset some variables.
+          stuffBottom = Y.one(parent).get('clientHeight') + Y.one(parent).getY();
+          presentNumber = Y.all(post).size();
+          execute = true;
+        } // if bottom
+      } // else execute
+    }); // Y on scroll
+    }); // Y on DOMready
+    
+    function createPage (jsonRaw)
+    {
+      if (jsonRaw === null) return;
+      
+      var json = Y.JSON.parse(jsonRaw);
+      var YnewItemsToDelete = YnewItemsToClone.cloneNode(true);
+      var YnewItems = YnewItemsToDelete.show().all('.summary-item').hide();
+      
+        // Append the contents of the next page to this page.
+        YparentToAppend.one('.summary-item-list').append(
+          YnewItems
+//        Y.Selector.query(parent + '>div', Y.DOM.create(json), true).innerHTML
+        );
+      
+      for (var i = 0; i < pageSize; i++) {
+        var j = (pageIndex - 1) * pageSize + i;
+        YnewItems.item(i).one('a').set('href', json.items[j].fullUrl);
+        YnewItems.item(i).one('img').set('src', json.items[j].assetUrl);
+        YnewItems.item(i).one('.product-price span').setContent(
+          (json.items[j].variants[0].price / 100).toFixed(2)
+        );
+      }
+      
+      YnewItemsToDelete.remove();
+      YnewItems.show();
+    } // function createPage
+    
+    function cachedAjaxRequest ()
+    {
+      if (jsonCachedRequest === null)
+      {
+          // ajax request
+          Y.io('/shop?format=json', {
+            on: {
+              success: function (x, o) {
+                try {
+                  d = o.responseText;
+                } catch (e) {
+                  console.log("JSON Parse failed!");
+                  return;
+                }
+                
+                jsonCachedRequest = d;
+                createPage(d);
+              }
+            }
+          });
+      }
+      return jsonCachedRequest;
+    } // function cachedAjaxRequest
+    
+  }); // Y use node
+</script>
