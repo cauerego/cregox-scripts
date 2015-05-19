@@ -18,7 +18,7 @@
     
     Y.on('domready', function() {
       YparentToAppend = Y.one(parent).one('div');
-      var execute = true;
+      var execute = false;
       var stuffBottom = Y.one(parent).get('clientHeight') + Y.one(parent).getY();
       var urlQuery = window.location.pathname;
       var currentItemsCount = Y.all(post).size();
@@ -54,14 +54,18 @@
           
           createPage();
           
-          // Reset some variables.
-          stuffBottom = Y.one(parent).get('clientHeight') + Y.one(parent).getY();
-          currentItemsCount = Y.all(post).size();
-          execute = true;
+          resetScrollingVars();
         } // if bottom
       } // else execute
     }); // Y on scroll
     }); // Y on DOMready
+    
+    function resetScrollingVars ()
+    {
+      stuffBottom = Y.one(parent).get('clientHeight') + Y.one(parent).getY();
+      currentItemsCount = Y.all(post).size();
+      execute = true;
+    }
     
     function createPage ()
     {
@@ -111,6 +115,7 @@
                 
                 jsonCachedRequest = json;
                 totalItemsCount = json.items.length;
+                resetScrollingVars();
               }
             }
           });
