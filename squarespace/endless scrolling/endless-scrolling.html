@@ -17,12 +17,14 @@
       var pageSize = 0;
       var pageIndex = 1;
       var totalItemsCount = 0;// Static.SQUARESPACE_CONTEXT.collection.itemCount;
-
-      YparentToAppend = Y.one(parent).one('div');
       var execute = false;
-      var stuffBottom = Y.one(parent).get('clientHeight') + Y.one(parent).getY();
       var urlQuery = window.location.pathname;
-      var currentItemsCount = Y.all(post).size();
+      var stuffBottom;
+      var currentItemsCount;
+
+      stuffBottom = Y.one(parent).get('clientHeight') + Y.one(parent).getY();
+      currentItemsCount = Y.all(post).size();
+      YparentToAppend = Y.one(parent).one('div');
       cacheAjaxRequest();
 
       setMouseHover(YparentToAppend);
