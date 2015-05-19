@@ -2,7 +2,7 @@
   // mostly based on script from foley at http://answers.squarespace.com/questions/17153/how-can-i-create-an-infinite-scroll-blog-on-the-developer-platform
 
   Y.use('node', function() {
-  
+    
     // config
     var loadingMargin = 500; //px
     var parent = 'main#main .wrapper';
@@ -34,14 +34,13 @@
     {
       if (currentItemsCount >= totalItemsCount && execute === true)
       {
-//        YparentToAppend.append('<h1>There are no more posts.</h1>');
         Y.one('footer#footer').show();
         execute = false;
       }
       else
       {
         var spaceHeight = document.documentElement.clientHeight + window.scrollY;
-
+        
         // measures distance from page top to content bottom
         // should be less than scrollY position
         if (spaceHeight + loadingMargin >= stuffBottom && execute === true)
@@ -52,7 +51,7 @@
           pageIndex++;
           
           createPage();
-
+          
           // Reset some variables.
           stuffBottom = Y.one(parent).get('clientHeight') + Y.one(parent).getY();
           currentItemsCount = Y.all(post).size();
