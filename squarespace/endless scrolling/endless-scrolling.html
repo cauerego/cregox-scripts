@@ -20,13 +20,13 @@
       var pageSize = 0;
       var pageIndex = 1;
       var totalItemsCount = 0;// Static.SQUARESPACE_CONTEXT.collection.itemCount;
-      var execute = false;
+      var execute;
       var urlQuery = window.location.pathname;
       var stuffBottom;
       var currentItemsCount;
 
-      stuffBottom = Y.one(parent).get('clientHeight') + Y.one(parent).getY();
-      currentItemsCount = Y.all(post).size();
+      resetScrollingVars();
+      execute = false;
       YparentToAppend = Y.one(parent).one('div');
       cacheAjaxRequest();
 
