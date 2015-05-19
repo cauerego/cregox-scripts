@@ -17,7 +17,6 @@
     
     Y.on('domready', function() {
       YparentToAppend = Y.one(parent).one('div');
-//      YparentToAppend.one('.sqs-row').remove();
       var execute = true;
       var stuffBottom = Y.one(parent).get('clientHeight') + Y.one(parent).getY();
       var urlQuery = window.location.pathname;
@@ -67,11 +66,7 @@
       var YnewItemsToDelete = YnewItemsToClone.cloneNode(true);
       var YnewItems = YnewItemsToDelete.show().all('.summary-item').hide();
       
-        // Append the contents of the next page to this page.
-        YparentToAppend.one('.summary-item-list').append(
-          YnewItems
-//        Y.Selector.query(parent + '>div', Y.DOM.create(json), true).innerHTML
-        );
+      YparentToAppend.one('.summary-item-list').append(YnewItems);
       
       for (var i = 0; i < pageSize; i++) {
         var j = (pageIndex - 1) * pageSize + i;
