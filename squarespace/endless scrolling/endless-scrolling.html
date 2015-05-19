@@ -24,6 +24,8 @@
       var currentItemsCount = Y.all(post).size();
       cacheAjaxRequest();
       
+      setMouseHover(YparentToAppend);
+      
       YnewItemsToClone = YparentToAppend.one('.summary-item-list').cloneNode(true);
       YnewItemsToClone.hide();
       pageSize = YnewItemsToClone.all('.summary-item').size();
@@ -69,8 +71,6 @@
       var YnewItemsToDelete = YnewItemsToClone.cloneNode(true);
       var YnewItems = YnewItemsToDelete.show().all('.summary-item').hide();
       
-      YparentToAppend.one('.summary-item-list').append(YnewItems);
-      
       for (var i = 0; i < pageSize; i++) {
         var j = (pageIndex - 1) * pageSize + i;
         if (j >= totalItemsCount) {
@@ -84,6 +84,8 @@
         }
       }
       
+      setMouseHover(YnewItemsToDelete);
+      YparentToAppend.one('.summary-item-list').append(YnewItems);
       YnewItemsToDelete.remove();
       YnewItems.show();
       
@@ -112,6 +114,22 @@
           });
       }
     } // function cachedAjaxRequest
+    
+    function setMouseHover (Ynode)
+    {
+      Ynode.all('.summary-item img').on('mouseenter', function(e){
+        e.currentTarget.transition({
+          duration:0.5,
+          opacity:0.5
+        });
+      });
+      Ynode.all('.summary-item img').on('mouseleave', function(e){
+        e.currentTarget.transition({
+          duration:0.5,
+          opacity:1
+        });
+      });
+    } // function setMouseHover
     
   }); // Y use node
 </script>
