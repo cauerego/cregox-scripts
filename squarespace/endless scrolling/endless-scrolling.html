@@ -80,12 +80,13 @@
 
         YnewItemsToDelete.all('img').setStyle('opacity', 1);
 
-        for (var i = 0; i < pageSize; i++)
+        for (var i = pageSize - 1; i >= 0; i--)
         {
           var j = (pageIndex - 1) * pageSize + i;
           if (j >= totalItemsCount)
           {
-            YnewItems.item(i).remove();
+            YnewItems.item(i).hide().empty().remove(true);
+            YnewItems.pop(i);
           }
           else
           {
@@ -99,7 +100,7 @@
 
         setMouseHover(YnewItemsToDelete);
         YparentToAppend.one('.summary-item-list').append(YnewItems);
-        YnewItemsToDelete.remove();
+        YnewItemsToDelete.remove(true);
         YnewItems.show();
 
         Y.one('body').simulate('resize'); // adjust items in the columns
