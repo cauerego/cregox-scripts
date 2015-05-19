@@ -79,6 +79,8 @@
       
       YnewItemsToDelete.remove();
       YnewItems.show();
+      
+      Y.one('body').simulate('resize'); // adjust items in the columns
     } // function createPage
     
     function cachedAjaxRequest ()
