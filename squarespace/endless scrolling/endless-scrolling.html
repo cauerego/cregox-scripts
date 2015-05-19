@@ -43,6 +43,7 @@
       {
         if (currentItemsCount >= totalItemsCount && execute === true)
         {
+          Y.one('a[href^="javascript:endlessScrollingLoading"]').remove(true);
           Y.one('footer#footer').show();
           execute = false;
         }
