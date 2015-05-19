@@ -69,7 +69,9 @@
       
       var json = jsonCachedRequest;
       var YnewItemsToDelete = YnewItemsToClone.cloneNode(true);
-      var YnewItems = YnewItemsToDelete.show().all('.summary-item').hide();
+      var YnewItems = YnewItemsToDelete.all('.summary-item').hide();
+      
+      YnewItemsToDelete.all('img').setStyle('opacity', 1);
       
       for (var i = 0; i < pageSize; i++) {
         var j = (pageIndex - 1) * pageSize + i;
