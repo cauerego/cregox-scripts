@@ -14,24 +14,28 @@
     var YnewItemsToClone;
     var pageSize = 0;
     var pageIndex = 1;
+    var totalItemsCount = 0;// Static.SQUARESPACE_CONTEXT.collection.itemCount;
     
     Y.on('domready', function() {
       YparentToAppend = Y.one(parent).one('div');
       var execute = true;
       var stuffBottom = Y.one(parent).get('clientHeight') + Y.one(parent).getY();
       var urlQuery = window.location.pathname;
-      var postNumber = 99999;// Static.SQUARESPACE_CONTEXT.collection.itemCount;
-      var presentNumber = Y.all(post).size();
+      var currentItemsCount = Y.all(post).size();
+      cacheAjaxRequest();
       
       YnewItemsToClone = YparentToAppend.one('.summary-item-list').cloneNode(true);
       YnewItemsToClone.hide();
       pageSize = YnewItemsToClone.all('.summary-item').size();
+      
+      Y.one('footer#footer').hide();
     
     Y.on('scroll', function()
     {
-      if (presentNumber >= postNumber && execute === true) // ignored
+      if (currentItemsCount >= totalItemsCount && execute === true)
       {
-        YparentToAppend.append('<h1>There are no more posts.</h1>')
+//        YparentToAppend.append('<h1>There are no more posts.</h1>');
+        Y.one('footer#footer').show();
         execute = false;
       }
       else
@@ -47,22 +51,22 @@
           
           pageIndex++;
           
-          createPage( cachedAjaxRequest() );
+          createPage();
 
           // Reset some variables.
           stuffBottom = Y.one(parent).get('clientHeight') + Y.one(parent).getY();
-          presentNumber = Y.all(post).size();
+          currentItemsCount = Y.all(post).size();
           execute = true;
         } // if bottom
       } // else execute
     }); // Y on scroll
     }); // Y on DOMready
     
-    function createPage (jsonRaw)
+    function createPage ()
     {
-      if (jsonRaw === null) return;
+      if (jsonCachedRequest === null) return;
       
-      var json = Y.JSON.parse(jsonRaw);
+      var json = jsonCachedRequest;
       var YnewItemsToDelete = YnewItemsToClone.cloneNode(true);
       var YnewItems = YnewItemsToDelete.show().all('.summary-item').hide();
       
@@ -70,11 +74,15 @@
       
       for (var i = 0; i < pageSize; i++) {
         var j = (pageIndex - 1) * pageSize + i;
-        YnewItems.item(i).one('a').set('href', json.items[j].fullUrl);
-        YnewItems.item(i).one('img').set('src', json.items[j].assetUrl);
-        YnewItems.item(i).one('.product-price span').setContent(
-          (json.items[j].variants[0].price / 100).toFixed(2)
-        );
+        if (j >= totalItemsCount) {
+          YnewItems.item(i).remove();
+        } else {
+          YnewItems.item(i).one('a').set('href', json.items[j].fullUrl);
+          YnewItems.item(i).one('img').set('src', json.items[j].assetUrl);
+          YnewItems.item(i).one('.product-price span').setContent(
+            (json.items[j].variants[0].price / 100).toFixed(2)
+          );
+        }
       }
       
       YnewItemsToDelete.remove();
@@ -83,7 +91,7 @@
       Y.one('body').simulate('resize'); // adjust items in the columns
     } // function createPage
     
-    function cachedAjaxRequest ()
+    function cacheAjaxRequest ()
     {
       if (jsonCachedRequest === null)
       {
@@ -92,19 +100,18 @@
             on: {
               success: function (x, o) {
                 try {
-                  d = o.responseText;
+                  json = Y.JSON.parse(o.responseText);
                 } catch (e) {
                   console.log("JSON Parse failed!");
                   return;
                 }
                 
-                jsonCachedRequest = d;
-                createPage(d);
+                jsonCachedRequest = json;
+                totalItemsCount = json.items.length;
               }
             }
           });
       }
-      return jsonCachedRequest;
     } // function cachedAjaxRequest
     
   }); // Y use node
