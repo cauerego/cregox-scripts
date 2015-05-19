@@ -5,6 +5,9 @@
   {
     Y.on('domready', function()
     {
+      // prevent script from running in squarespace editor
+      if (window.top.document !== window.document) return;
+
       // config
       var loadingMargin = 500; //px
       var parent = 'main#main .wrapper';
