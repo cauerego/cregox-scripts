@@ -32,6 +32,9 @@
 
       setMouseHover(YparentToAppend);
 
+      // while there's no proper function to go back to a specific item, this should let the browser do the trick
+      YparentToAppend.all('.summary-item a').set('target', '_blank');
+      
       YnewItemsToClone = YparentToAppend.one('.summary-item-list').cloneNode(true);
       YnewItemsToClone.hide();
       pageSize = YnewItemsToClone.all('.summary-item').size();
