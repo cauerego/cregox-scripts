@@ -3,21 +3,21 @@
 
   Y.use('node', function()
   {
-    // config
-    var loadingMargin = 500; //px
-    var parent = 'main#main .wrapper';
-    var post = '.summary-item';
-
-    // private
-    var jsonCachedRequest = null;
-    var YparentToAppend;
-    var YnewItemsToClone;
-    var pageSize = 0;
-    var pageIndex = 1;
-    var totalItemsCount = 0;// Static.SQUARESPACE_CONTEXT.collection.itemCount;
-
     Y.on('domready', function()
     {
+      // config
+      var loadingMargin = 500; //px
+      var parent = 'main#main .wrapper';
+      var post = '.summary-item';
+
+      // private
+      var jsonCachedRequest = null;
+      var YparentToAppend;
+      var YnewItemsToClone;
+      var pageSize = 0;
+      var pageIndex = 1;
+      var totalItemsCount = 0;// Static.SQUARESPACE_CONTEXT.collection.itemCount;
+
       YparentToAppend = Y.one(parent).one('div');
       var execute = false;
       var stuffBottom = Y.one(parent).get('clientHeight') + Y.one(parent).getY();
@@ -60,93 +60,93 @@
           } // if bottom
         } // else execute
       }); // Y on scroll
-    }); // Y on DOMready
 
-    function resetScrollingVars ()
-    {
-      stuffBottom = Y.one(parent).get('clientHeight') + Y.one(parent).getY();
-      currentItemsCount = Y.all(post).size();
-      execute = true;
-    }
-
-    function createPage ()
-    {
-      if (jsonCachedRequest === null) return;
-
-      var json = jsonCachedRequest;
-      var YnewItemsToDelete = YnewItemsToClone.cloneNode(true);
-      var YnewItems = YnewItemsToDelete.all('.summary-item').hide();
-
-      YnewItemsToDelete.all('img').setStyle('opacity', 1);
-
-      for (var i = 0; i < pageSize; i++)
+      function resetScrollingVars ()
       {
-        var j = (pageIndex - 1) * pageSize + i;
-        if (j >= totalItemsCount)
-        {
-          YnewItems.item(i).remove();
-        }
-        else
-        {
-          YnewItems.item(i).one('a').set('href', json.items[j].fullUrl);
-          YnewItems.item(i).one('img').set('src', json.items[j].assetUrl);
-          YnewItems.item(i).one('.product-price span').setContent(
-            (json.items[j].variants[0].price / 100).toFixed(2)
-          );
-        }
+        stuffBottom = Y.one(parent).get('clientHeight') + Y.one(parent).getY();
+        currentItemsCount = Y.all(post).size();
+        execute = true;
       }
 
-      setMouseHover(YnewItemsToDelete);
-      YparentToAppend.one('.summary-item-list').append(YnewItems);
-      YnewItemsToDelete.remove();
-      YnewItems.show();
-
-      Y.one('body').simulate('resize'); // adjust items in the columns
-    } // function createPage
-
-    function cacheAjaxRequest ()
-    {
-      if (jsonCachedRequest === null)
+      function createPage ()
       {
-        // ajax request
-        Y.io('/shop?format=json', {
-          on: {
-            success: function (x, o) {
-              try {
-                json = Y.JSON.parse(o.responseText);
-              } catch (e) {
-                console.log("JSON Parse failed!");
-                return;
-              }
+        if (jsonCachedRequest === null) return;
 
-              jsonCachedRequest = json;
-              totalItemsCount = json.items.length;
-              resetScrollingVars();
-            }
+        var json = jsonCachedRequest;
+        var YnewItemsToDelete = YnewItemsToClone.cloneNode(true);
+        var YnewItems = YnewItemsToDelete.all('.summary-item').hide();
+
+        YnewItemsToDelete.all('img').setStyle('opacity', 1);
+
+        for (var i = 0; i < pageSize; i++)
+        {
+          var j = (pageIndex - 1) * pageSize + i;
+          if (j >= totalItemsCount)
+          {
+            YnewItems.item(i).remove();
           }
-        });
-      }
-    } // function cachedAjaxRequest
+          else
+          {
+            YnewItems.item(i).one('a').set('href', json.items[j].fullUrl);
+            YnewItems.item(i).one('img').set('src', json.items[j].assetUrl);
+            YnewItems.item(i).one('.product-price span').setContent(
+              (json.items[j].variants[0].price / 100).toFixed(2)
+            );
+          }
+        }
 
-    function setMouseHover (Ynode)
-    {
-      Ynode.all('.summary-item img').on('mouseenter', function(e)
-      {
-        e.currentTarget.transition(
-        {
-          duration:0.5,
-          opacity:0.5
-        });
-      });
-      Ynode.all('.summary-item img').on('mouseleave', function(e)
-      {
-        e.currentTarget.transition(
-        {
-          duration:0.5,
-          opacity:1
-        });
-      });
-    } // function setMouseHover
+        setMouseHover(YnewItemsToDelete);
+        YparentToAppend.one('.summary-item-list').append(YnewItems);
+        YnewItemsToDelete.remove();
+        YnewItems.show();
 
+        Y.one('body').simulate('resize'); // adjust items in the columns
+      } // function createPage
+
+      function cacheAjaxRequest ()
+      {
+        if (jsonCachedRequest === null)
+        {
+          // ajax request
+          Y.io('/shop?format=json', {
+            on: {
+              success: function (x, o) {
+                try {
+                  json = Y.JSON.parse(o.responseText);
+                } catch (e) {
+                  console.log("JSON Parse failed!");
+                  return;
+                }
+
+                jsonCachedRequest = json;
+                totalItemsCount = json.items.length;
+                resetScrollingVars();
+              }
+            }
+          });
+        }
+      } // function cachedAjaxRequest
+
+      function setMouseHover (Ynode)
+      {
+        Ynode.all('.summary-item img').on('mouseenter', function(e)
+        {
+          e.currentTarget.transition(
+            {
+              duration:0.5,
+              opacity:0.5
+            });
+        });
+        Ynode.all('.summary-item img').on('mouseleave', function(e)
+        {
+          e.currentTarget.transition(
+            {
+              duration:0.5,
+              opacity:1
+            });
+        });
+      } // function setMouseHover
+
+    }); // Y on DOMready
   }); // Y use node
 </script>
