@@ -26,6 +26,7 @@
       var urlQuery = window.location.pathname;
       var stuffBottom;
       var currentItemsCount;
+      var YloadingIcon;
       var msnry;
 
       resetScrollingVars();
@@ -35,10 +36,23 @@
 
       setMouseHover(YparentToAppend);
 
+      YloadingIcon = Y.one('a[href^="javascript:endlessScrollingLoading"]');
+
       // while there's no proper function to go back to a specific item, this should let the browser do the trick
       YparentToAppend.all('.summary-item a').set('target', '_blank');
       
       YparentToAppend.all('.summary-item').setStyle('width', 'initial');
+      
+      YloadingIcon.one('img').setStyles({
+        'position': 'absolute',
+        'bottom': 0,
+        'top': 'initial',
+        'left': 'initial',
+        'width': 'initial',
+        'height': 'initial'
+      });
+      YloadingIcon.one('div.image-block-wrapper').setStyle('padding-bottom', 0);
+      Y.one(parent).append(YloadingIcon);
       
       YnewItemsToClone = YparentToAppend.one('.summary-item-list').cloneNode(true);
       YnewItemsToClone.hide();
@@ -58,7 +72,7 @@
       {
         if (currentItemsCount >= totalItemsCount && execute === true)
         {
-          Y.one('a[href^="javascript:endlessScrollingLoading"]').remove(true);
+          YloadingIcon.remove(true);
           Y.one('footer#footer').show();
           execute = false;
         }
