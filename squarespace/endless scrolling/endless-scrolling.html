@@ -1,3 +1,5 @@
+<script src="http://cdnjs.cloudflare.com/ajax/libs/masonry/3.3.0/masonry.pkgd.min.js"></script>
+<script src="https://cdn.rawgit.com/desandro/imagesloaded/master/imagesloaded.pkgd.min.js"></script>
 <script name="endless scrolling" author="cregox.com">
   // mostly based on script from foley at http://answers.squarespace.com/questions/17153/how-can-i-create-an-infinite-scroll-blog-on-the-developer-platform
 
@@ -24,6 +26,7 @@
       var urlQuery = window.location.pathname;
       var stuffBottom;
       var currentItemsCount;
+      var msnry;
 
       resetScrollingVars();
       execute = false;
@@ -35,12 +38,21 @@
       // while there's no proper function to go back to a specific item, this should let the browser do the trick
       YparentToAppend.all('.summary-item a').set('target', '_blank');
       
+      YparentToAppend.all('.summary-item').setStyle('width', 'initial');
+      
       YnewItemsToClone = YparentToAppend.one('.summary-item-list').cloneNode(true);
       YnewItemsToClone.hide();
       pageSize = YnewItemsToClone.all('.summary-item').size();
 
       Y.one(parent).setStyle('background-color', '#e8edf3');
-      Y.one('footer#footer').hide();
+      Y.one('footer#footer').hide().setStyles({
+        'position': 'absolute',
+        'bottom': 0,
+        'left': '10px',
+        'right': '10px'
+      });
+
+      loadMasonry();
 
       Y.on('scroll', function()
       {
@@ -69,6 +81,21 @@
           } // if bottom
         } // else execute
       }); // Y on scroll
+
+      function loadMasonry ()
+      {
+        var container = document.querySelector(parent);
+        msnry = new Masonry( container, {
+  //        columnWidth: 250,
+          itemSelector: '.summary-item'
+        });
+        msnry.layout();
+        resetScrollingVars();
+        imagesLoaded( container, function() {
+          msnry.layout();
+          resetScrollingVars();
+        });
+      }
 
       function resetScrollingVars ()
       {
@@ -102,6 +129,7 @@
             YnewItems.item(i).one('.product-price span').setContent(
               (json.items[j].variants[0].price / 100).toFixed(2)
             );
+//            msnry.appended( YnewItems.item(i) );
           }
         }
 
@@ -109,6 +137,7 @@
         YparentToAppend.one('.summary-item-list').append(YnewItems);
         YnewItemsToDelete.remove(true);
         YnewItems.show();
+        loadMasonry();
 
         Y.one('body').simulate('resize'); // adjust items in the columns
       } // function createPage
