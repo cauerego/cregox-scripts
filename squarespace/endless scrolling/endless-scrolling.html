@@ -106,9 +106,8 @@
         var container = document.querySelector(masonry);
         msnry = new Masonry( container,
         {
-//          columnWidth: 250,
-//          "percentPosition": true,
-          itemSelector: '.summary-item'
+          'gutter': 15,
+          'itemSelector': '.summary-item'
         });
         
         msnry.layout();
