@@ -1,19 +1,32 @@
 // endless scrolling by cregox.com
-.summary-thumbnail.img-wrapper {
-  padding-bottom: 0 !important;
-  img {
-    background-color: rgba(17,17,17,.05);
-    position: initial !important;
-    width: 100% !important;
-    height: auto !important;
+main#main.endless-scrolling {
+  .summary-item {
+    margin-bottom: 0 !important;
+    margin-right: 1em !important;
   }
-}
-.summary-price .product-price {
-  position: absolute;
-  bottom: 1em;
-  right: 0;
-  padding: 1em;
-  span {
-    font-size: 1.6em;
+  .summary-thumbnail.img-wrapper {
+    padding-bottom: 0 !important;
+    img {
+      background-color: rgba(17,17,17,.05);
+      position: initial !important;
+      width: 100% !important;
+      height: auto !important;
+    }
+  }
+  .summary-price .product-price {
+    position: absolute;
+    bottom: 1em;
+    right: 0;
+    padding: 1em;
+    span {
+      font-size: 1.6em;
+    }
+  }
+  @media screen and (max-width: 1024px) {
+    width: 100%;
+    div.wrapper>div {
+      padding-top: 2em;
+      height: 100%;
+    }
   }
 }
