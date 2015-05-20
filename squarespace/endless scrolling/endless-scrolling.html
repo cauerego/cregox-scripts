@@ -56,7 +56,10 @@
       YnewItemsToClone.hide();
       pageSize = YnewItemsToClone.all('.summary-item').size();
 
-      Y.one(parent).setStyle('background-color', '#e8edf3');
+      Y.one(parent).setStyles({
+        'background-color': '#e8edf3',
+        'padding': '2em'
+      });
       Y.one('footer#footer').hide().setStyles({
         'position': 'absolute',
         'bottom': 0,
