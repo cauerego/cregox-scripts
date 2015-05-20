@@ -29,8 +29,6 @@
       var YloadingIcon;
       var msnry;
 
-      resetScrollingVars();
-      execute = false;
       YparentToAppend = Y.one(parent).one('div');
       cacheAjaxRequest();
 
@@ -67,6 +65,7 @@
       });
 
       loadMasonry();
+      execute = false;
 
       Y.on('scroll', function()
       {
@@ -91,7 +90,7 @@
 
             createPage();
 
-            resetScrollingVars();
+            loadMasonry();
           } // if bottom
         } // else execute
       }); // Y on scroll
@@ -99,20 +98,28 @@
       function loadMasonry ()
       {
         var container = document.querySelector(parent);
-        msnry = new Masonry( container, {
-  //        columnWidth: 250,
+        msnry = new Masonry( container,
+        {
+//          columnWidth: 250,
+//          "percentPosition": true,
           itemSelector: '.summary-item'
         });
+        
         msnry.layout();
         resetScrollingVars();
-        imagesLoaded( container, function() {
+        msnry.layout();
+        imagesLoaded( container, function()
+        {
           msnry.layout();
           resetScrollingVars();
+          msnry.layout();
         });
       }
 
       function resetScrollingVars ()
       {
+        Y.one('body').simulate('resize'); // adjust items in the columns
+        
         stuffBottom = Y.one(parent).get('clientHeight') + Y.one(parent).getY();
         currentItemsCount = Y.all(post).size();
         execute = true;
@@ -143,7 +150,6 @@
             YnewItems.item(i).one('.product-price span').setContent(
               (json.items[j].variants[0].price / 100).toFixed(2)
             );
-//            msnry.appended( YnewItems.item(i) );
           }
         }
 
@@ -151,9 +157,6 @@
         YparentToAppend.one('.summary-item-list').append(YnewItems);
         YnewItemsToDelete.remove(true);
         YnewItems.show();
-        loadMasonry();
-
-        Y.one('body').simulate('resize'); // adjust items in the columns
       } // function createPage
 
       function cacheAjaxRequest ()
