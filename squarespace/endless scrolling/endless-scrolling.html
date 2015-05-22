@@ -13,7 +13,7 @@
       // config
       var loadingMargin = 500; //px
       var parent = 'main#main .wrapper';
-      var masonry = '.summary-item-list';
+      var list = '.summary-item-list';
       var post = '.summary-item';
 
       // private
@@ -102,7 +102,7 @@
 
       function loadMasonry ()
       {
-        var container = document.querySelector(masonry);
+        var container = document.querySelector(list);
         msnry = new Masonry( container,
         {
           'transitionDuration': 0,
