@@ -211,16 +211,4 @@
 
     }); // Y on DOMready
   }); // Y use node
-
-  // (basically failed) attempt to resolve issue of not loading next page
-  // when the browser have a below bottom scrolled saved location on loading
-  var execute = function () {
-    window.scrollTo(0, 0);
-    console.log("should be scrolled");    
-  };
-
-  if ( !!(window.addEventListener) )
-    window.addEventListener("DOMContentLoaded", execute)
-  else // MSIE
-      window.attachEvent("onload", execute)
 </script>
