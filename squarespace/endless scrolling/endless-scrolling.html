@@ -7,6 +7,8 @@
   {
     Y.on('domready', function()
     {
+      Y.one('main#main').addClass('endless-scrolling');
+
       // prevent script from running in squarespace editor
       if (window.top.document !== window.document) return;
 
@@ -30,8 +32,6 @@
       var YloadingIcon;
       var msnry;
       var YnewItems;
-
-      Y.one('main#main').addClass('endless-scrolling');
 
       YparentToAppend = Y.one(parent).one('div');
       cacheAjaxRequest();
