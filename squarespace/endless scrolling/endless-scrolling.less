@@ -6,6 +6,15 @@ body main#main {
 main#main.endless-scrolling {
   .summary-item {
     margin: 0 !important;
+    width: ~'calc(33.33% - 10px)' !important; // 3 columns
+    @media screen {
+      @media (max-width: 880px) { // switch
+        width: ~'calc(50% - 8px)' !important; // 2 columns
+      }
+      @media (max-width: 550px) { //switch
+        width: 100% !important; // 1 column
+      }
+    }
   }
   .summary-thumbnail.img-wrapper {
     padding-bottom: 0 !important;
