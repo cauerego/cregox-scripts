@@ -45,13 +45,14 @@
       YparentToAppend.all('.summary-item').setStyle('width', 'initial');
       
       YloadingIcon.one('img').setStyles({
-        'position': 'absolute',
-        'bottom': 0,
         'top': 'initial',
+        'bottom': 0,
         'left': 'initial',
+        'right': 'initial',
         'width': 'initial',
-        'height': 'initial'
-      });
+        'height': 'initial',
+        'position': 'initial'
+      }).addClass('endless-loading').get('parentNode').setStyle('text-align', 'center');
       YloadingIcon.one('div.image-block-wrapper').setStyle('padding-bottom', 0);
       Y.one(parent).append(YloadingIcon);
       
