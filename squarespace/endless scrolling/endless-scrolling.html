@@ -43,6 +43,8 @@
       // while there's no proper function to go back to a specific item, this should let the browser do the trick
       YparentToAppend.all('.summary-item a').set('target', '_blank');
       
+      // basically all styles set in this whole script need to be set here
+      // to overwrite styles already set on the element before this
       YparentToAppend.all('.summary-item').setStyle('width', 'initial');
       
       YloadingIcon.one('img').setStyles({
