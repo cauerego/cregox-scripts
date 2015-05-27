@@ -41,7 +41,7 @@
 
       YloadingIcon = Y.one('a[href^="javascript:endlessScrollingLoading"]');
 
-      // basically all styles set in this whole script need to be set here
+      // almost all styles set in this whole script need to be set here
       // to overwrite styles already set on the element before this
       YparentToAppend.all('.summary-item').setStyle('width', 'initial');
       
@@ -53,7 +53,7 @@
         'width': '',
         'height': '',
         'position': ''
-      }).addClass('endless-loading').get('parentNode').setStyle('text-align', 'center');
+      }).addClass('endless-loading').ancestor().setStyle('text-align', 'center');
       YloadingIcon.one('div.image-block-wrapper').setStyle('padding-bottom', 0);
       Y.one(parent).append(YloadingIcon);
       
@@ -201,8 +201,11 @@
                   return;
                 }
 
+                // when done loading json
+
                 jsonCachedRequest = json;
                 totalItemsCount = json.items.length;
+
                 resetScrollingVars();
 
                 createPage();
@@ -210,7 +213,7 @@
             }
           });
         }
-      } // function cachedAjaxRequest
+      } // function cacheAjaxRequest
 
       function setMouseHover (Ynode)
       {
