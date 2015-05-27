@@ -25,7 +25,7 @@
       var pageSize = 0;
       var pageIndex = 1;
       var totalItemsCount = 0;// Static.SQUARESPACE_CONTEXT.collection.itemCount;
-      var execute;
+      var execute = true;
       var urlQuery = window.location.pathname;
       var stuffBottom;
       var currentItemsCount;
@@ -40,21 +40,18 @@
 
       YloadingIcon = Y.one('a[href^="javascript:endlessScrollingLoading"]');
 
-      // while there's no proper function to go back to a specific item, this should let the browser do the trick
-      YparentToAppend.all('.summary-item a').set('target', '_blank');
-      
       // basically all styles set in this whole script need to be set here
       // to overwrite styles already set on the element before this
       YparentToAppend.all('.summary-item').setStyle('width', 'initial');
       
       YloadingIcon.one('img').setStyles({
-        'top': 'initial',
-        'bottom': 0,
-        'left': 'initial',
-        'right': 'initial',
-        'width': 'initial',
-        'height': 'initial',
-        'position': 'initial'
+        'bottom': '',
+        'top': '',
+        'left': '',
+        'right': '',
+        'width': '',
+        'height': '',
+        'position': ''
       }).addClass('endless-loading').get('parentNode').setStyle('text-align', 'center');
       YloadingIcon.one('div.image-block-wrapper').setStyle('padding-bottom', 0);
       Y.one(parent).append(YloadingIcon);
@@ -78,28 +75,19 @@
 
       Y.on('scroll', function()
       {
-        if (currentItemsCount >= totalItemsCount && execute === true)
+        if (execute === true)
         {
-          YloadingIcon.remove(true);
-          Y.one('footer#footer').show();
-          execute = false;
-        }
-        else
-        {
-          var spaceHeight = document.documentElement.clientHeight + window.scrollY;
-
-          // measures distance from page top to content bottom
-          // should be less than scrollY position
-          if (spaceHeight + loadingMargin >= stuffBottom && execute === true)
+          if (currentItemsCount >= totalItemsCount)
           {
-            // prevents scroll listener from firing too often
+            YloadingIcon.remove(true);
+            Y.one('footer#footer').show();
             execute = false;
-
+          }
+          else
+          {
             createPage();
-
-            loadMasonry(); loadMasonry(); // loading twice just works
-          } // if bottom
-        } // else execute
+          }
+        } // if execute
       }); // Y on scroll
 
       function loadMasonry ()
@@ -129,14 +117,39 @@
       {
         Y.one('body').simulate('resize'); // adjust items in the columns
         
-        stuffBottom = Y.one(parent).get('clientHeight') + Y.one(parent).getY();
+        var parentChild = parent + '>div';
+        stuffBottom = Y.one(parentChild).get('clientHeight') + Y.one(parentChild).getY();
         currentItemsCount = Y.all(post).size();
-        execute = true;
+        YloadingIcon.one('img').hide();
+        
+        var windowHeight = window.innerHeight
+         || document.documentElement.clientHeight
+         || document.body.clientHeight;
+        var spaceHeight = windowHeight + window.scrollY;
+
+        // measures distance from page top to content bottom
+        // should be less than scrollY position
+        if (spaceHeight + loadingMargin >= stuffBottom)
+        {
+          if (spaceHeight + windowHeight > stuffBottom)
+          {
+            var Yimg = YloadingIcon.one('img:not(.fixed)');
+            if (Yimg) Yimg.addClass('fixed');
+          }
+          else
+          {
+            var Yimg = YloadingIcon.one('img.fixed');
+            if (Yimg) Yimg.removeClass('fixed');
+          }
+          createPage();
+        }
       }
 
       function createPage ()
       {
-        if (jsonCachedRequest === null) return;
+        YloadingIcon.one('img').show();
+
+        if (jsonCachedRequest === null) return false;
 
         pageIndex++;
 
@@ -167,6 +180,9 @@
         setMouseHover(YnewItemsToDelete);
         YparentToAppend.one('.summary-item-list').append(YnewItems);
         YnewItemsToDelete.remove(true);
+
+        loadMasonry(); loadMasonry(); // loading twice just works
+        return true;
       } // function createPage
 
       function cacheAjaxRequest ()
@@ -187,6 +203,8 @@
                 jsonCachedRequest = json;
                 totalItemsCount = json.items.length;
                 resetScrollingVars();
+
+                createPage();
               }
             }
           });
