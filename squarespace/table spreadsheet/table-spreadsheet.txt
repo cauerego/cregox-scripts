@@ -1,0 +1,32 @@
+div.menus {
+  width: 100%;
+  .menu-section-header {
+    background: gray;
+    padding: 10px;
+    margin-bottom: 0; //replace default
+    text-align: left;
+  }
+  .menu-item:nth-child(2n+2) {
+    background: silver;
+  }
+  .menu-item {
+    background: lightgray;
+    padding: 10px;
+    margin: 0; //replace default
+    .menu-item-title {
+      text-align: left;
+      padding-right: 100px;
+    }
+    .menu-item-description {
+      display: none;
+    }
+    .menu-item-price-bottom{
+      margin-bottom: -30px;
+      text-align: right;
+      position: relative;
+      top: -30px;
+      width: 100px;
+      margin-left: ~"calc(100% - 100px)";
+    }
+  }
+}
