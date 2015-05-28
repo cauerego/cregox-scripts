@@ -29,6 +29,9 @@
     var YloadingIcon;
     var msnry;
     var layoutComplete = false;
+    var initialScrollPosition;
+
+    initialScrollPosition = window.scrollY;
 
     YparentToAppend = Y.one(parent).one('div');
     cacheAjaxRequest();
@@ -38,6 +41,7 @@
     setMouseHover(YparentToAppend);
 
     YloadingIcon = Y.one('a[href^="javascript:endlessScrollingLoading"]');
+    YloadingIcon.one('div.image-block-wrapper').setStyle('height', 'auto');
 
     // almost all styles set in this whole script need to be set here
     // to overwrite styles already set on the element before this
@@ -90,7 +94,8 @@
         
         if (layoutComplete)
         {
-          YloadingIcon.one('div.image-block-wrapper').setStyle('height', 'auto');
+          YloadingIcon.remove(true);
+          window.scrollTo(0, initialScrollPosition);
         }
         else
         {
@@ -159,7 +164,6 @@
         );
       }
 
-      YloadingIcon.remove(true);
       Y.one('footer#footer').show();
       layoutComplete = true;
 
