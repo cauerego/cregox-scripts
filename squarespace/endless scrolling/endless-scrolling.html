@@ -1,5 +1,6 @@
 <script src="http://cdnjs.cloudflare.com/ajax/libs/masonry/3.3.0/masonry.pkgd.min.js"></script>
 <script src="https://cdn.rawgit.com/desandro/imagesloaded/master/imagesloaded.pkgd.min.js"></script>
+<script src="https://cdn.rawgit.com/aFarkas/lazysizes/gh-pages/lazysizes.min.js"></script>
 <style>
   .summary-item-list {
     display: none;
@@ -39,7 +40,6 @@
       var YloadingIcon;
       var msnry;
       var layoutComplete = false;
-      var unloadedImages = [];
 
       YparentToAppend = Y.one(parent).one('div');
       cacheAjaxRequest();
@@ -84,11 +84,6 @@
       loadMasonry(); loadMasonry(); // loading twice just works
       YparentToAppend.one('.summary-item-list').setStyle('display', 'block'); // with style, prevented summary to appear
 
-      Y.on('scroll', function()
-      {
-//        loadScreenImages();
-      });
-      
       Y.on('resize', function()
       {
         loadMasonry(); loadMasonry(); // loading twice just works
@@ -168,23 +163,12 @@
           setMouseHover(YnewItem);
           YparentToAppend.one('.summary-item-list').append(YnewItem);
 
-          var YnewItemImg = YnewItem.one('img');
-          var newItemImg = YnewItemImg.getDOMNode();
-          
-          YnewItemImg.setStyle('opacity', 1);
-          
-          newItemImg.onload = function () {
-              // set element with image size and prevent image from loading
-//console.log('remove image '+ newItemImg +' nH:'+ newItemImg.naturalHeight +' h:'+ newItemImg.height);
-              this.setAttribute('style', 'width:'+ this.width +'px !important; height:'+ this.height +'px !important;');
-              this.src = '';
-              return false;
-            };
-
-          unloadedImages.push(YnewItemImg);
-          var imgSrc = json.items[i].assetUrl +'?format='+ thumbSize +'w';
-          YnewItemImg.set('data-src', imgSrc);
-          newItemImg.src = imgSrc;
+          YnewItem.one('img')
+            .setStyle('opacity', 1)
+            .setAttribute('data-src', json.items[i].assetUrl +'?format='+ thumbSize +'w')
+            .addClass('lazyload')
+            .getDOMNode()
+              .src = json.items[i].assetUrl +'?format=100w';
 
           YnewItem.one('a').set('href', json.items[i].fullUrl);
           YnewItem.one('.product-price span').setContent(
@@ -192,41 +176,12 @@
           );
         }
 
-//        YloadingIcon.remove(true);
+        YloadingIcon.remove(true);
         Y.one('footer#footer').show();
         layoutComplete = true;
 
         return true;
       } // function createLayout
-      
-      function loadScreenImages ()
-      {
-        YloadingIcon.one('img').show();
-
-        for (var i = unloadedImages.length - 1; i >= 0; i--)
-        {
-          var item = unloadedImages[i];
-          if ( isScrolledIntoView(item) )
-          {
-            item.set('src', item.get('data-src'));
-            unloadedImages.splice(i, 1);
-          }
-        }
-
-        var container = document.querySelector(list);
-        imagesLoaded( container, function()
-        {
-          YloadingIcon.one('img').hide();
-        });
-      } // function loadScreenImages
-
-      function isScrolledIntoView(el) {
-        var elemTop = el.getBoundingClientRect().top;
-        var elemBottom = el.getBoundingClientRect().bottom;
-
-        var isVisible = (elemTop >= 0) && (elemBottom <= window.innerHeight);
-        return isVisible;
-      }
 
       function cacheAjaxRequest ()
       {
