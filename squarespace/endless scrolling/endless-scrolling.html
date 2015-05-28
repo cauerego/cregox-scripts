@@ -143,11 +143,10 @@
 
         for (var i = pageSizeLoaded; i < totalItemsCount; i++)
         {
-          var YnewItem = YnewItemToClone.cloneNode(true);
+          var YnewItem = YnewItemToClone.cloneNode(true).show();
 
           var YnewItemImg = YnewItem.one('img');
           YnewItemImg
-            .hide()
             .setStyle('opacity', 1)
             .onload = function () {
               // set element with image size and prevent image from loading
