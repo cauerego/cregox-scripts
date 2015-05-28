@@ -27,7 +27,6 @@
       var totalItemsCount = 0;// Static.SQUARESPACE_CONTEXT.collection.itemCount;
       var urlQuery = window.location.pathname;
       var stuffBottom;
-      var currentItemsCount;
       var YloadingIcon;
       var msnry;
       var layoutComplete = false;
@@ -74,10 +73,8 @@
 
       Y.on('scroll', function()
       {
-          if (currentItemsCount >= totalItemsCount)
-          {
-          }
         loadScreenImages();
+        loadMasonry();
       }); // Y on scroll
 
       function loadMasonry ()
@@ -115,7 +112,6 @@
         
         var parentChild = parent + '>div';
         stuffBottom = Y.one(parentChild).get('clientHeight') + Y.one(parentChild).getY();
-        currentItemsCount = Y.all(post).size();
 
         YloadingIcon.one('img').hide();
         
