@@ -74,8 +74,12 @@
       Y.on('scroll', function()
       {
         loadScreenImages();
+      });
+      
+      Y.on('resize', function()
+      {
         loadMasonry();
-      }); // Y on scroll
+      });
 
       function loadMasonry ()
       {
