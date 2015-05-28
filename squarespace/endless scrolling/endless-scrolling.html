@@ -142,7 +142,7 @@
       {
         YloadingIcon.one('img').show();
 
-        if (jsonCachedRequest === null) return false;
+        if (jsonCachedRequest === null || layoutComplete) return false;
 
         var json = jsonCachedRequest;
 
