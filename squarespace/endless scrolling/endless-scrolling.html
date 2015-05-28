@@ -43,6 +43,8 @@
 
       YparentToAppend = Y.one(parent).one('div');
       cacheAjaxRequest();
+      
+      itemsLoaded = YparentToAppend.one('.summary-item-list').all('.summary-item').size();
 
       setMouseHover(YparentToAppend);
 
@@ -67,8 +69,7 @@
       YnewItemToClone = YparentToAppend.one('.summary-item-list .summary-item').cloneNode(true);
       YnewItemToClone.addClass('cloned').hide();
       YparentToAppend.append(YnewItemToClone);
-      YnewItemToClone.one('img').set('src', '');
-      itemsLoaded = YparentToAppend.one('.summary-item-list').all('.summary-item').size();
+      YnewItemToClone.one('img').set('src', '').setAttribute('data-src', '');
 
       Y.one(parent).setStyles({
         'background-color': '#e8edf3',
@@ -144,7 +145,6 @@
             var Yimg = YloadingIcon.one('img.fixed');
             if (Yimg) Yimg.removeClass('fixed');
           }
-//          createLayout();
         }
       }
 
