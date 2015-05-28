@@ -22,17 +22,14 @@
       // private
       var jsonCachedRequest = null;
       var YparentToAppend;
-      var YnewItemsToClone;
-      var pageSize = 0;
-      var pageIndex = 1;
+      var YnewItemToClone;
+      var pageSizeLoaded = 0;
       var totalItemsCount = 0;// Static.SQUARESPACE_CONTEXT.collection.itemCount;
-      var execute = true;
       var urlQuery = window.location.pathname;
       var stuffBottom;
       var currentItemsCount;
       var YloadingIcon;
       var msnry;
-      var YnewItems;
 
       YparentToAppend = Y.one(parent).one('div');
       cacheAjaxRequest();
@@ -57,9 +54,9 @@
       YloadingIcon.one('div.image-block-wrapper').setStyle('padding-bottom', 0);
       Y.one(parent).append(YloadingIcon);
       
-      YnewItemsToClone = YparentToAppend.one('.summary-item-list').cloneNode(true);
-      YnewItemsToClone.hide();
-      pageSize = YnewItemsToClone.all('.summary-item').size();
+      YnewItemToClone = YparentToAppend.one('.summary-item-list .summary-item').cloneNode(true);
+      YnewItemToClone.hide();
+      pageSizeLoaded = YparentToAppend.one('.summary-item-list').all('.summary-item').size();
 
       Y.one(parent).setStyles({
         'background-color': '#e8edf3',
@@ -76,19 +73,10 @@
 
       Y.on('scroll', function()
       {
-        if (execute === true)
-        {
           if (currentItemsCount >= totalItemsCount)
           {
-            YloadingIcon.remove(true);
-            Y.one('footer#footer').show();
-            execute = false;
           }
-          else
-          {
-            createPage();
-          }
-        } // if execute
+        loadScreenImages();
       }); // Y on scroll
 
       function loadMasonry ()
@@ -104,7 +92,6 @@
         
         msnry.on( 'layoutComplete', function( laidOutItems )
         {
-          if (YnewItems) YnewItems.show();
           resetScrollingVars();
           return true; // listen to event only once
         });
@@ -152,39 +139,44 @@
 
         if (jsonCachedRequest === null) return false;
 
-        pageIndex++;
-
         var json = jsonCachedRequest;
-        var YnewItemsToDelete = YnewItemsToClone.cloneNode(true);
 
-        YnewItemsToDelete.all('img').setStyle('opacity', 1);
-        YnewItems = YnewItemsToDelete.all('.summary-item').hide();
-
-        for (var i = pageSize - 1; i >= 0; i--)
+        for (var i = pageSizeLoaded; i < totalItemsCount; i++)
         {
-          var j = (pageIndex - 1) * pageSize + i;
-          if (j >= totalItemsCount)
-          {
-            YnewItems.item(i).hide().empty().remove(true);
-            YnewItems.pop(i);
-          }
-          else
-          {
-            YnewItems.item(i).one('a').set('href', json.items[j].fullUrl);
-            YnewItems.item(i).one('img').set('src', json.items[j].assetUrl +'?format='+ thumbSize +'w');
-            YnewItems.item(i).one('.product-price span').setContent(
-              (json.items[j].variants[0].price / 100).toFixed(2)
-            );
-          }
+          var YnewItem = YnewItemToClone.cloneNode(true);
+
+          var YnewItemImg = YnewItem.one('img');
+          YnewItemImg
+            .hide()
+            .setStyle('opacity', 1)
+            .onload = function () {
+              // set element with image size and prevent image from loading
+            };
+
+          YnewItemImg.set('src', json.items[i].assetUrl +'?format='+ thumbSize +'w');
+
+
+          YnewItem.one('a').set('href', json.items[i].fullUrl);
+          YnewItem.one('.product-price span').setContent(
+            (json.items[i].variants[0].price / 100).toFixed(2)
+          );
+
+          setMouseHover(YnewItem);
+          YparentToAppend.one('.summary-item-list').append(YnewItem);
         }
 
-        setMouseHover(YnewItemsToDelete);
-        YparentToAppend.one('.summary-item-list').append(YnewItems);
-        YnewItemsToDelete.remove(true);
-
-        loadMasonry(); loadMasonry(); // loading twice just works
+        Y.one('footer#footer').show();
+        YloadingIcon.one('div.image-block-wrapper').setStyle('height', 'auto');
+//        YloadingIcon.remove(true);
         return true;
       } // function createPage
+      
+      function loadScreenImages ()
+      {
+//        YloadingIcon.one('img').show();
+        // only load images that are on screen
+//        resetScrollingVars();
+      } // function loadScreenImages
 
       function cacheAjaxRequest ()
       {
@@ -209,6 +201,7 @@
                 resetScrollingVars();
 
                 createPage();
+                loadMasonry(); loadMasonry(); // loading twice just works
               }
             }
           });
