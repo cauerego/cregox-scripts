@@ -30,6 +30,7 @@
       var currentItemsCount;
       var YloadingIcon;
       var msnry;
+      var layoutComplete = false;
 
       YparentToAppend = Y.one(parent).one('div');
       cacheAjaxRequest();
@@ -92,7 +93,14 @@
         
         msnry.on( 'layoutComplete', function( laidOutItems )
         {
-          resetScrollingVars();
+          if (layoutComplete)
+          {
+            YloadingIcon.one('div.image-block-wrapper').setStyle('height', 'auto');
+          }
+          else
+          {
+            resetScrollingVars();
+          }
           return true; // listen to event only once
         });
         imagesLoaded( container, function()
@@ -108,6 +116,7 @@
         var parentChild = parent + '>div';
         stuffBottom = Y.one(parentChild).get('clientHeight') + Y.one(parentChild).getY();
         currentItemsCount = Y.all(post).size();
+
         YloadingIcon.one('img').hide();
         
         var windowHeight = window.innerHeight
@@ -165,7 +174,7 @@
         }
 
         Y.one('footer#footer').show();
-        YloadingIcon.one('div.image-block-wrapper').setStyle('height', 'auto');
+        layoutComplete = true;
 //        YloadingIcon.remove(true);
         return true;
       } // function createPage
