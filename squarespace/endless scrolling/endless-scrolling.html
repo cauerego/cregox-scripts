@@ -154,10 +154,17 @@
           YnewItemImg
             .setStyle('opacity', 1)
             .onload = function () {
+              YnewItem.setStyles({
+                'width': YnewItemImg.width +'px',
+                'height': YnewItemImg.height +'px'
+              });
+              YnewItemImg.set('src', '');
               // set element with image size and prevent image from loading
             };
 
-          YnewItemImg.set('src', json.items[i].assetUrl +'?format='+ thumbSize +'w');
+          var imgSrc = json.items[i].assetUrl +'?format='+ thumbSize +'w';
+          YnewItemImg.set('src', imgSrc);
+          YnewItemImg.set('data-src', imgSrc);
 
 
           YnewItem.one('a').set('href', json.items[i].fullUrl);
