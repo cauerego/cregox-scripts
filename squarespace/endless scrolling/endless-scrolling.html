@@ -23,7 +23,7 @@
       var jsonCachedRequest = null;
       var YparentToAppend;
       var YnewItemToClone;
-      var pageSizeLoaded = 0;
+      var itemsLoaded = 0;
       var totalItemsCount = 0;// Static.SQUARESPACE_CONTEXT.collection.itemCount;
       var urlQuery = window.location.pathname;
       var stuffBottom;
@@ -56,7 +56,7 @@
       
       YnewItemToClone = YparentToAppend.one('.summary-item-list .summary-item').cloneNode(true);
       YnewItemToClone.hide();
-      pageSizeLoaded = YparentToAppend.one('.summary-item-list').all('.summary-item').size();
+      itemsLoaded = YparentToAppend.one('.summary-item-list').all('.summary-item').size();
 
       Y.one(parent).setStyles({
         'background-color': '#e8edf3',
@@ -134,11 +134,11 @@
             var Yimg = YloadingIcon.one('img.fixed');
             if (Yimg) Yimg.removeClass('fixed');
           }
-          createPage();
+          createLayout();
         }
       }
 
-      function createPage ()
+      function createLayout ()
       {
         YloadingIcon.one('img').show();
 
@@ -146,7 +146,7 @@
 
         var json = jsonCachedRequest;
 
-        for (var i = pageSizeLoaded; i < totalItemsCount; i++)
+        for (var i = itemsLoaded; i < totalItemsCount; i++)
         {
           var YnewItem = YnewItemToClone.cloneNode(true).show();
 
@@ -173,7 +173,7 @@
         layoutComplete = true;
 //        YloadingIcon.remove(true);
         return true;
-      } // function createPage
+      } // function createLayout
       
       function loadScreenImages ()
       {
@@ -204,7 +204,7 @@
 
                 resetScrollingVars();
 
-                createPage();
+                createLayout();
                 loadMasonry(); loadMasonry(); // loading twice just works
               }
             }
