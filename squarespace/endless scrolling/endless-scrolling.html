@@ -39,6 +39,7 @@
       var YloadingIcon;
       var msnry;
       var layoutComplete = false;
+      var unloadedImages = [];
 
       YparentToAppend = Y.one(parent).one('div');
       cacheAjaxRequest();
@@ -64,7 +65,9 @@
       Y.one(parent).append(YloadingIcon);
       
       YnewItemToClone = YparentToAppend.one('.summary-item-list .summary-item').cloneNode(true);
-      YnewItemToClone.hide();
+      YnewItemToClone.addClass('cloned').hide();
+      YparentToAppend.append(YnewItemToClone);
+      YnewItemToClone.one('img').set('src', '');
       itemsLoaded = YparentToAppend.one('.summary-item-list').all('.summary-item').size();
 
       Y.one(parent).setStyles({
@@ -83,12 +86,12 @@
 
       Y.on('scroll', function()
       {
-        loadScreenImages();
+//        loadScreenImages();
       });
       
       Y.on('resize', function()
       {
-        loadMasonry();
+        loadMasonry(); loadMasonry(); // loading twice just works
       });
 
       function loadMasonry ()
@@ -124,8 +127,6 @@
 
       function resetScrollingVars ()
       {
-        Y.one('body').simulate('resize'); // adjust items in the columns
-        
         var parentChild = parent + '>div';
         stuffBottom = Y.one(parentChild).get('clientHeight') + Y.one(parentChild).getY();
         
@@ -162,32 +163,33 @@
 
         for (var i = itemsLoaded; i < totalItemsCount; i++)
         {
-          var YnewItem = YnewItemToClone.cloneNode(true).show();
+          var YnewItem = YnewItemToClone.cloneNode(true).show();//.removeClass('cloned');
+
+          setMouseHover(YnewItem);
+          YparentToAppend.one('.summary-item-list').append(YnewItem);
 
           var YnewItemImg = YnewItem.one('img');
-          YnewItemImg
-            .setStyle('opacity', 1)
-            .onload = function () {
-              YnewItem.setStyles({
-                'width': YnewItemImg.width +'px',
-                'height': YnewItemImg.height +'px'
-              });
-              YnewItemImg.set('src', '');
+          var newItemImg = YnewItemImg.getDOMNode();
+          
+          YnewItemImg.setStyle('opacity', 1);
+          
+          newItemImg.onload = function () {
               // set element with image size and prevent image from loading
+//console.log('remove image '+ newItemImg +' nH:'+ newItemImg.naturalHeight +' h:'+ newItemImg.height);
+              this.setAttribute('style', 'width:'+ this.width +'px !important; height:'+ this.height +'px !important;');
+              this.src = '';
+              return false;
             };
 
+          unloadedImages.push(YnewItemImg);
           var imgSrc = json.items[i].assetUrl +'?format='+ thumbSize +'w';
-          YnewItemImg.set('src', imgSrc);
           YnewItemImg.set('data-src', imgSrc);
-
+          newItemImg.src = imgSrc;
 
           YnewItem.one('a').set('href', json.items[i].fullUrl);
           YnewItem.one('.product-price span').setContent(
             (json.items[i].variants[0].price / 100).toFixed(2)
           );
-
-          setMouseHover(YnewItem);
-          YparentToAppend.one('.summary-item-list').append(YnewItem);
         }
 
 //        YloadingIcon.remove(true);
@@ -199,10 +201,32 @@
       
       function loadScreenImages ()
       {
-//        YloadingIcon.one('img').show();
-        // only load images that are on screen
-//        resetScrollingVars();
+        YloadingIcon.one('img').show();
+
+        for (var i = unloadedImages.length - 1; i >= 0; i--)
+        {
+          var item = unloadedImages[i];
+          if ( isScrolledIntoView(item) )
+          {
+            item.set('src', item.get('data-src'));
+            unloadedImages.splice(i, 1);
+          }
+        }
+
+        var container = document.querySelector(list);
+        imagesLoaded( container, function()
+        {
+          YloadingIcon.one('img').hide();
+        });
       } // function loadScreenImages
+
+      function isScrolledIntoView(el) {
+        var elemTop = el.getBoundingClientRect().top;
+        var elemBottom = el.getBoundingClientRect().bottom;
+
+        var isVisible = (elemTop >= 0) && (elemBottom <= window.innerHeight);
+        return isVisible;
+      }
 
       function cacheAjaxRequest ()
       {
@@ -225,6 +249,8 @@
                 totalItemsCount = json.items.length;
 
                 resetScrollingVars();
+
+                Y.one('body').simulate('resize'); // adjust items in the columns
 
                 createLayout();
                 loadMasonry(); loadMasonry(); // loading twice just works
