@@ -8,6 +8,9 @@ main#main.endless-scrolling {
   // this should let the browser do the trick
   a[href^="javascript:endlessScrollingLoading"] div.image-block-wrapper {
     height: 99999px;
+    img {
+      height: initial !important; // just for the editor
+    }
   }
   .endless-loading {
     position: initial;
