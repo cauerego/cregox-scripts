@@ -124,7 +124,7 @@
         // should be less than scrollY position
         if (spaceHeight + loadingMargin >= stuffBottom)
         {
-          if (spaceHeight + windowHeight > stuffBottom)
+          if (spaceHeight > stuffBottom)
           {
             var Yimg = YloadingIcon.one('img:not(.fixed)');
             if (Yimg) Yimg.addClass('fixed');
