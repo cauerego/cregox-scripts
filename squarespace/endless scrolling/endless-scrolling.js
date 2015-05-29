@@ -77,12 +77,12 @@ function endlessScrolling ()
     'padding': '2em'
   });
 
-  loadMasonry(); loadMasonry(); // loading twice just works
+  loadMasonry();
   YparentToAppend.one('.summary-item-list').setStyle('display', 'block'); // with style, prevented summary to appear
 
   Y.on('resize', function()
   {
-    loadMasonry(); loadMasonry(); // loading twice just works
+    loadMasonry();
   });
 
   function loadMasonry ()
@@ -93,7 +93,7 @@ function endlessScrolling ()
       'transitionDuration': 0,
       'gutter': 15,
       'itemSelector': '.summary-item',
-      'isInitLayour': false
+      'isInitLayout': false
     });
     
     msnry.on( 'layoutComplete', function( laidOutItems )
@@ -219,7 +219,7 @@ function endlessScrolling ()
             Y.one('body').simulate('resize'); // adjust items in the columns
 
             createLayout();
-            loadMasonry(); loadMasonry(); // loading twice just works
+            loadMasonry();
           }
         }
       });
