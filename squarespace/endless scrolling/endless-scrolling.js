@@ -22,8 +22,18 @@ function endlessScrolling ()
   var msnry;
   var layoutComplete = false;
   var initialScrollPosition;
+  var page;
 
   initialScrollPosition = window.scrollY;
+  page = location.hash.slice(1);
+  if ( page.slice(0,1) === 'p' )
+  {
+    page = parseInt(page.slice(1), 10);
+  }
+  else
+  {
+    page = undefined;
+  }
 
   YparentToAppend = Y.one(parent).one('div');
   cacheAjaxRequest();
@@ -91,7 +101,12 @@ function endlessScrolling ()
       {
         YparentToAppend.one('.summary-item-list').all('.summary-item').addClass('positioned');
         YloadingIcon.remove(true);
-        window.scrollTo(0, initialScrollPosition);
+        var position = initialScrollPosition;
+        if ( page )
+        {
+          position = Y.one(post+'#'+page).getY();
+        }
+        window.scrollTo(0, position);
       }
       else
       {
@@ -143,6 +158,8 @@ function endlessScrolling ()
     for (var i = itemsLoaded; i < totalItemsCount; i++)
     {
       var YnewItem = YnewItemToClone.cloneNode(true).show();//.removeClass('cloned');
+
+      YnewItem.setAttribute('id', i);
 
       setMouseHover(YnewItem);
       YparentToAppend.one('.summary-item-list').append(YnewItem);
