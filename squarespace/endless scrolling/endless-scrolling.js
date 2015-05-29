@@ -102,7 +102,7 @@ function endlessScrolling ()
       
       if (layoutComplete)
       {
-        YparentToAppend.one('.summary-item-list').all('.summary-item').addClass('positioned');
+        YparentToAppend.one('.summary-item-list').all('.summary-item').removeClass('invisible');
         YloadingIcon.remove(true);
         var position = initialScrollPosition;
         var YpostPage = Y.one(post+'#'+pageId);
@@ -161,9 +161,13 @@ function endlessScrolling ()
 
     for (var i = itemsLoaded; i < totalItemsCount; i++)
     {
-      var YnewItem = YnewItemToClone.cloneNode(true).show();//.removeClass('cloned');
+      var YnewItem = YnewItemToClone.cloneNode(true).show();
 
-      YnewItem.setAttribute('id', i);
+      var itemPageId = json.items[i].fullUrl.split('/').pop();
+      YnewItem
+        .setAttribute('id', itemPageId)
+        .addClass('invisible')
+        .removeClass('cloned');
 
       setMouseHover(YnewItem);
       YparentToAppend.one('.summary-item-list').append(YnewItem);
