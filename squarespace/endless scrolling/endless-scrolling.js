@@ -179,7 +179,6 @@ function endlessScrolling ()
         .getDOMNode()
           .src = json.items[i].assetUrl +'?format=100w';
 
-      var itemPageId = json.items[i].fullUrl.split('/').pop();
       YnewItem.one('a')
         .set('href', json.items[i].fullUrl)
         .setAttribute('click-href', initialLocation + '#p@' + itemPageId)
