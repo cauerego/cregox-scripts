@@ -218,28 +218,3 @@ function endlessScrolling ()
     });
   } // function setMouseHover
 } // function endlessScrolling
-
-Y.use('node', function()
-{
-  Y.on('domready', function()
-  {
-    // enable Custom CSS to work on editor
-    Y.one('main#main').addClass('endless-scrolling');
-
-    // prevent script from running in squarespace editor
-    if (window.top.document !== window.document)
-    {
-      Y.one('main#main .summary-item-list').setStyle('display', 'block'); // with style, prevented summary to appear
-      return;
-    }
-    
-    Y.one('footer#footer').hide().setStyles({
-      'position': 'absolute',
-      'bottom': 0,
-      'left': '50px',
-      'right': '50px'
-    });
-
-    endlessScrolling();
-  })
-});
