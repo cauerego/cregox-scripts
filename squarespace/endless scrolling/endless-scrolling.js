@@ -22,20 +22,20 @@ function endlessScrolling ()
   var msnry;
   var layoutComplete = false;
   var initialScrollPosition;
-  var page;
+  var pageId;
   var initialLocation;
 
   initialLocation = document.location.href.split('#')[0];
 
   initialScrollPosition = window.scrollY;
-  page = location.hash.slice(1);
-  if ( page.slice(0,1) === 'p' )
+  pageId = location.hash.slice(1);
+  if ( pageId.slice(0,2) === 'p@' )
   {
-    page = parseInt(page.slice(1), 10);
+    pageId = page.slice(2);
   }
   else
   {
-    page = undefined;
+    pageId = undefined;
   }
 
   YparentToAppend = Y.one(parent).one('div');
@@ -105,7 +105,7 @@ function endlessScrolling ()
         YparentToAppend.one('.summary-item-list').all('.summary-item').addClass('positioned');
         YloadingIcon.remove(true);
         var position = initialScrollPosition;
-        var YpostPage = Y.one(post+'#'+page);
+        var YpostPage = Y.one(post+'#'+pageId);
         if ( YpostPage )
         {
           position = YpostPage.getY();
@@ -175,9 +175,10 @@ function endlessScrolling ()
         .getDOMNode()
           .src = json.items[i].assetUrl +'?format=100w';
 
+      var itemPageId = json.items[i].fullUrl.split('/').pop();
       YnewItem.one('a')
         .set('href', json.items[i].fullUrl)
-        .setAttribute('click-href', initialLocation + '#p' + i)
+        .setAttribute('click-href', initialLocation + '#p@' + itemPageId)
         .on('click', function() {
           document.location.href = this.getAttribute('click-href');
         });
