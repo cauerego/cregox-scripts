@@ -23,6 +23,9 @@ function endlessScrolling ()
   var layoutComplete = false;
   var initialScrollPosition;
   var page;
+  var initialLocation;
+
+  initialLocation = document.location.href.split('#')[0];
 
   initialScrollPosition = window.scrollY;
   page = location.hash.slice(1);
@@ -171,7 +174,13 @@ function endlessScrolling ()
         .getDOMNode()
           .src = json.items[i].assetUrl +'?format=100w';
 
-      YnewItem.one('a').set('href', json.items[i].fullUrl);
+      YnewItem.one('a')
+        .set('href', json.items[i].fullUrl)
+        .setAttribute('click-href', initialLocation + '#p' + i)
+        .on('click', function() {
+          document.location.href = this.getAttribute('click-href');
+        });
+
       YnewItem.one('.product-price span').setContent(
         (json.items[i].variants[0].price / 100).toFixed(2)
       );
