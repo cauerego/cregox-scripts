@@ -25,6 +25,7 @@ function endlessScrolling ()
   var initialScrollPosition;
   var pageId;
   var initialLocation;
+  var currentWidth;
 
   initialLocation = document.location.href.split('#')[0];
 
@@ -78,11 +79,12 @@ function endlessScrolling ()
     'padding': '2em'
   });
 
-  loadMasonry();
+  Y.one(parent).simulate('resize');
   YparentToAppend.one('.summary-item-list').setStyle('display', 'block'); // with style, prevented summary to appear
 
   Y.on('resize', function()
   {
+    currentWidth = Y.one('.summary-item-list .summary-item img').get('width');
     loadMasonry();
   });
 
@@ -176,12 +178,29 @@ function endlessScrolling ()
       setMouseHover(YnewItem);
       YparentToAppend.one('.summary-item-list').append(YnewItem);
 
+      var imgSize = json.items[i].originalSize;
+      var imgHeight = imgSize.split('x')[1];
+      var imgRatio = imgSize.split('x')[0] / imgHeight;
+      imgHeight = parseInt(currentWidth / imgRatio, 10);
       YnewItem.one('img')
+        .setAttribute('style', 'height:'+ imgHeight + 'px !important')
         .setStyle('opacity', 1)
-        .setAttribute('data-src', json.items[i].assetUrl +'?format='+ thumbSize +'w')
         .addClass('lazyload')
-        .getDOMNode()
-          .src = json.items[i].assetUrl +'?format=100w';
+        .setAttribute('data-image-dimensions', '')
+        .setAttribute('data-image', json.items[i].assetUrl)
+        .setAttribute('alt', '')
+        .setAttribute('data-src', json.items[i].assetUrl +'?format='+ thumbSize +'w')
+        .setAttribute('data-srcset',
+          json.items[i].assetUrl +'?format=100w 100w'
+          +','+ json.items[i].assetUrl +'?format=300w 300w'
+          +','+ json.items[i].assetUrl +'?format=500w 500w'
+        )
+        //.getDOMNode().src = json.items[i].assetUrl +'?format=100w'
+        .on('load', function()
+        {
+          this.setStyle('height', '');
+        })
+      ;
 
       YnewItem.one('a')
         .set('href', json.items[i].fullUrl)
