@@ -105,9 +105,10 @@ function endlessScrolling ()
         YparentToAppend.one('.summary-item-list').all('.summary-item').addClass('positioned');
         YloadingIcon.remove(true);
         var position = initialScrollPosition;
-        if ( page )
+        var YpostPage = Y.one(post+'#'+page);
+        if ( YpostPage )
         {
-          position = Y.one(post+'#'+page).getY();
+          position = YpostPage.getY();
         }
         window.scrollTo(0, position);
       }
