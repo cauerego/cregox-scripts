@@ -31,7 +31,7 @@ function endlessScrolling ()
   pageId = location.hash.slice(1);
   if ( pageId.slice(0,2) === 'p@' )
   {
-    pageId = page.slice(2);
+    pageId = pageId.slice(2);
   }
   else
   {
