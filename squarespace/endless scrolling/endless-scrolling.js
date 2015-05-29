@@ -20,6 +20,7 @@ function endlessScrolling ()
   var stuffBottom;
   var YloadingIcon;
   var msnry;
+  var createPageComplete = false;
   var layoutComplete = false;
   var initialScrollPosition;
   var pageId;
@@ -99,8 +100,10 @@ function endlessScrolling ()
     msnry.on( 'layoutComplete', function( laidOutItems )
     {
       YloadingIcon.one('img').hide();
-      
-      if (layoutComplete)
+
+      if (layoutComplete) return;
+
+      if (createPageComplete)
       {
         YparentToAppend.one('.summary-item-list').all('.summary-item').removeClass('invisible');
         YloadingIcon.remove(true);
@@ -111,6 +114,7 @@ function endlessScrolling ()
           position = YpostPage.getY();
         }
         window.scrollTo(0, position);
+        layoutComplete = true;
       }
       else
       {
@@ -153,7 +157,7 @@ function endlessScrolling ()
 
   function createLayout ()
   {
-    if (jsonCachedRequest === null || layoutComplete) return false;
+    if (jsonCachedRequest === null || createPageComplete) return false;
 
     YloadingIcon.one('img').show();
 
@@ -192,7 +196,7 @@ function endlessScrolling ()
     }
 
     Y.one('footer#footer').show();
-    layoutComplete = true;
+    createPageComplete = true;
 
     return true;
   } // function createLayout
