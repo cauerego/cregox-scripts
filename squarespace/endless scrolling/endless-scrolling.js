@@ -183,7 +183,7 @@ function endlessScrolling ()
         .set('href', json.items[i].fullUrl)
         .setAttribute('click-href', initialLocation + '#p@' + itemPageId)
         .on('click', function() {
-          document.location.href = this.getAttribute('click-href');
+          history.replaceState({},'', this.getAttribute('click-href'));
         });
 
       YnewItem.one('.product-price span').setContent(
