@@ -181,7 +181,8 @@ function endlessScrolling ()
       var imgRatio = imgSize.split('x')[0] / imgHeight;
       imgHeight = parseInt(currentWidth / imgRatio, 10);
       $newItem.find('img').first()
-        .css({'opacity': 1, 'height': imgHeight + 'px !important'})
+        .attr('style', 'height: '+ imgHeight +'px !important')
+        .css({'opacity': 1})
         .addClass('lazyload')
         .attr('data-image-dimensions', '')
         .attr('data-image', json.items[i].assetUrl)
