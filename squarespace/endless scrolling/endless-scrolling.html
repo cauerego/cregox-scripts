@@ -1,5 +1,10 @@
-<script src="https://cdn.rawgit.com/cregox/endless-scrolling/master/endless-scrolling.min.js"></script>
+<script src="https://cdn.rawgit.com/cregox/endless-scrolling/1.0/endless-scrolling.min.js"></script>
 
+<!--
+ remove includes from here, and into js
+ http://stackoverflow.com/a/10939737/274502
+-->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
 <script src="http://cdnjs.cloudflare.com/ajax/libs/masonry/3.3.0/masonry.pkgd.min.js"></script>
 <script src="https://cdn.rawgit.com/desandro/imagesloaded/master/imagesloaded.pkgd.min.js"></script>
 <script src="https://cdn.rawgit.com/aFarkas/lazysizes/gh-pages/lazysizes.min.js"></script>
@@ -19,7 +24,8 @@
       // prevent script from running in squarespace editor
       if (window.top.document !== window.document)
       {
-        Y.one('main#main .summary-item-list').setStyle('display', 'block'); // with style, prevented summary to appear
+        // with style, prevented summary to appear
+        Y.one('main#main .summary-item-list').setStyle('display', 'block');
         return;
       }
     
@@ -30,12 +36,69 @@
         'right': '50px'
       });
 
+      // settings
       endlessScrolling({
         'thumbSize': 300,
         'loadingMargin': 500,
         'container': 'main#main .wrapper',
-        'item': '.summary-item'
+        'item': '.summary-item',
+        'onComplete': setMouseHover // how to send parameter?
       });
+
+      setMouseHover( Y.one('main#main .wrapper div') );
+
+      function cacheAjaxRequest ()
+      {
+        if (jsonCachedRequest === null)
+        {
+          // ajax request
+          Y.io('/shop?format=json', {
+            on: {
+              success: function (x, o) {
+                try {
+                  json = Y.JSON.parse(o.responseText);
+                } catch (e) {
+                  console.log("JSON Parse failed!");
+                  return;
+                }
+
+                // when done loading json
+
+                jsonCachedRequest = json;
+                totalItemsCount = json.items.length;
+
+                resetScrollingVars();
+
+                Y.one('body').simulate('resize'); // adjust items in the columns
+
+                createLayout();
+                loadMasonry();
+              }
+            }
+          });
+        }
+      } // function cacheAjaxRequest
+
+      // make it look like the original shop
+      function setMouseHover (Ynode)
+      {
+        Ynode.all('.summary-item img').on('mouseenter', function(e)
+        {
+          e.currentTarget.transition(
+            {
+              duration:0.5,
+              opacity:0.5
+            });
+        });
+        Ynode.all('.summary-item img').on('mouseleave', function(e)
+        {
+          e.currentTarget.transition(
+            {
+              duration:0.5,
+              opacity:1
+            });
+        });
+      } // function setMouseHover
     })
   });
 </script>

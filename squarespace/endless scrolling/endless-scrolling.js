@@ -12,13 +12,13 @@ function endlessScrolling ()
 
   // private
   var jsonCachedRequest = null;
-  var YparentToAppend;
-  var YnewItemToClone;
+  var $parentToAppend;
+  var $newItemToClone;
   var itemsLoaded = 0;
   var totalItemsCount = 0;// Static.SQUARESPACE_CONTEXT.collection.itemCount;
   var urlQuery = window.location.pathname;
   var stuffBottom;
-  var YloadingIcon;
+  var $loadingIcon;
   var msnry;
   var createPageComplete = false;
   var layoutComplete = false;
@@ -40,21 +40,19 @@ function endlessScrolling ()
     pageId = undefined;
   }
 
-  YparentToAppend = Y.one(parent).one('div');
+  $parentToAppend = $(parent).first().find('div');
   cacheAjaxRequest();
   
-  itemsLoaded = YparentToAppend.one('.summary-item-list').all('.summary-item').size();
+  itemsLoaded = $parentToAppend.find('.summary-item-list .summary-item').length;
 
-  setMouseHover(YparentToAppend);
-
-  YloadingIcon = Y.one('a[href^="javascript:endlessScrollingLoading"]');
-  YloadingIcon.one('div.image-block-wrapper').setStyle('height', 'auto');
+  $loadingIcon = $('a[href^="javascript:endlessScrollingLoading"]').first();
+  $loadingIcon.find('div.image-block-wrapper').first().css({'height': 'auto'});
 
   // almost all styles set in this whole script need to be set here
   // to overwrite styles already set on the element before this
-  YparentToAppend.all('.summary-item').setStyle('width', 'initial');
+  $parentToAppend.find('.summary-item').css({'width': 'initial'});
   
-  YloadingIcon.one('img').setStyles({
+  $loadingIcon.find('img').first().css({
     'bottom': '',
     'top': '',
     'left': '',
@@ -62,29 +60,29 @@ function endlessScrolling ()
     'width': '',
     'height': '',
     'position': ''
-  }).addClass('endless-loading').ancestor().setStyle('text-align', 'center');
-  YloadingIcon.one('div.image-block-wrapper').setStyle('padding-bottom', 0);
-  Y.one(parent).append(YloadingIcon);
+  }).addClass('endless-loading').parent().css({'text-align': 'center'});
+  $loadingIcon.find('div.image-block-wrapper').first().css({'padding-bottom': 0});
+  $(parent).append($loadingIcon);
   
-  YnewItemToClone = YparentToAppend.one('.summary-item-list .summary-item').cloneNode(true);
-  YnewItemToClone.addClass('cloned').hide();
-  YparentToAppend.append(YnewItemToClone);
-  YnewItemToClone.one('img')
-    .set('src', '')
-    .setAttribute('data-src', '')
+  $newItemToClone = $parentToAppend.find('.summary-item-list .summary-item').first().clone();
+  $newItemToClone.addClass('cloned').hide();
+  $parentToAppend.append($newItemToClone);
+  $newItemToClone.find('img').first()
+    .attr('src', '')
+    .attr('data-src', '')
     .removeClass('positioned');
 
-  Y.one(parent).setStyles({
+  $(parent).first().css({
     'background-color': '#e8edf3',
     'padding': '2em'
   });
 
-  Y.one(parent).simulate('resize');
-  YparentToAppend.one('.summary-item-list').setStyle('display', 'block'); // with style, prevented summary to appear
+  $(window).resize();
+  $parentToAppend.find('.summary-item-list').first().css({'display': 'block'}); // with style, prevented summary to appear
 
-  Y.on('resize', function()
+  $(window).resize(function()
   {
-    currentWidth = Y.one('.summary-item-list .summary-item img').get('width');
+    currentWidth = $('.summary-item-list .summary-item img').first().width();
     loadMasonry();
   });
 
@@ -101,19 +99,19 @@ function endlessScrolling ()
     
     msnry.on( 'layoutComplete', function( laidOutItems )
     {
-      YloadingIcon.one('img').hide();
+      $loadingIcon.find('img').hide();
 
       if (layoutComplete) return;
 
       if (createPageComplete)
       {
-        YparentToAppend.one('.summary-item-list').all('.summary-item').removeClass('invisible');
-        YloadingIcon.remove(true);
+        $parentToAppend.find('.summary-item-list .summary-item').removeClass('invisible');
+        $loadingIcon.remove();
         var position = initialScrollPosition;
-        var YpostPage = Y.one(post+'#'+pageId);
-        if ( YpostPage )
+        var $postPage = $(post+'#'+pageId).first();
+        if ( $postPage && $postPage.offset() )
         {
-          position = YpostPage.getY();
+          position = $postPage.offset().top;
         }
         window.scrollTo(0, position);
         layoutComplete = true;
@@ -133,7 +131,7 @@ function endlessScrolling ()
   function resetScrollingVars ()
   {
     var parentChild = parent + '>div';
-    stuffBottom = Y.one(parentChild).get('clientHeight') + Y.one(parentChild).getY();
+    stuffBottom = $(parentChild).get('clientHeight') + $(parentChild).offset().top;
     
     var windowHeight = window.innerHeight
      || document.documentElement.clientHeight
@@ -146,13 +144,13 @@ function endlessScrolling ()
     {
       if (spaceHeight > stuffBottom)
       {
-        var Yimg = YloadingIcon.one('img:not(.fixed)');
-        if (Yimg) Yimg.addClass('fixed');
+        var $img = $loadingIcon.find('img:not(.fixed)');
+        if ($img) $img.addClass('fixed');
       }
       else
       {
-        var Yimg = YloadingIcon.one('img.fixed');
-        if (Yimg) Yimg.removeClass('fixed');
+        var $img = $loadingIcon.find('img.fixed');
+        if ($img) $img.removeClass('fixed');
       }
     }
   }
@@ -161,36 +159,35 @@ function endlessScrolling ()
   {
     if (jsonCachedRequest === null || createPageComplete) return false;
 
-    YloadingIcon.one('img').show();
+    $loadingIcon.find('img').show();
 
     var json = jsonCachedRequest;
 
     for (var i = itemsLoaded; i < totalItemsCount; i++)
     {
-      var YnewItem = YnewItemToClone.cloneNode(true).show();
+      var $newItem = $newItemToClone.clone().show();
 
       var itemPageId = json.items[i].fullUrl.split('/').pop();
-      YnewItem
-        .setAttribute('id', itemPageId)
+      $newItem
+        .attr('id', itemPageId)
         .addClass('invisible')
         .removeClass('cloned');
 
-      setMouseHover(YnewItem);
-      YparentToAppend.one('.summary-item-list').append(YnewItem);
+      setMouseHover($newItem);
+      $parentToAppend.find('.summary-item-list').first().append($newItem);
 
       var imgSize = json.items[i].originalSize;
       var imgHeight = imgSize.split('x')[1];
       var imgRatio = imgSize.split('x')[0] / imgHeight;
       imgHeight = parseInt(currentWidth / imgRatio, 10);
-      YnewItem.one('img')
-        .setAttribute('style', 'height:'+ imgHeight + 'px !important')
-        .setStyle('opacity', 1)
+      $newItem.find('img').first()
+        .css({'opacity': 1, 'height': imgHeight + 'px !important'})
         .addClass('lazyload')
-        .setAttribute('data-image-dimensions', '')
-        .setAttribute('data-image', json.items[i].assetUrl)
-        .setAttribute('alt', '')
-        .setAttribute('data-src', json.items[i].assetUrl +'?format='+ thumbSize +'w')
-        .setAttribute('data-srcset',
+        .attr('data-image-dimensions', '')
+        .attr('data-image', json.items[i].assetUrl)
+        .attr('alt', '')
+        .attr('data-src', json.items[i].assetUrl +'?format='+ thumbSize +'w')
+        .attr('data-srcset',
           json.items[i].assetUrl +'?format=100w 100w'
           +','+ json.items[i].assetUrl +'?format=300w 300w'
           +','+ json.items[i].assetUrl +'?format=500w 500w'
@@ -198,27 +195,31 @@ function endlessScrolling ()
         //.getDOMNode().src = json.items[i].assetUrl +'?format=100w'
         .on('load', function()
         {
-          this.setStyle('height', '');
+          $(this).css({'height': ''});
         })
       ;
 
-      YnewItem.one('a')
-        .set('href', json.items[i].fullUrl)
-        .setAttribute('click-href', initialLocation + '#p@' + itemPageId)
+      $newItem.find('a').first()
+        .attr('href', json.items[i].fullUrl)
+        .attr('click-href', initialLocation + '#p@' + itemPageId)
         .on('click', function() {
           history.replaceState({},'', this.getAttribute('click-href'));
         });
 
-      YnewItem.one('.product-price span').setContent(
+      $newItem.find('.product-price span').first().text(
         (json.items[i].variants[0].price / 100).toFixed(2)
       );
     }
 
-    Y.one('footer#footer').show();
+    $('footer#footer').show();
     createPageComplete = true;
 
     return true;
   } // function createLayout
+
+//////////////
+// will remove all below here !!
+//////////////
 
   function cacheAjaxRequest ()
   {
@@ -252,9 +253,9 @@ function endlessScrolling ()
     }
   } // function cacheAjaxRequest
 
-  function setMouseHover (Ynode)
+  function setMouseHover ($node)
   {
-    Ynode.all('.summary-item img').on('mouseenter', function(e)
+    $node.find('.summary-item img').on('mouseenter', function(e)
     {
       e.currentTarget.transition(
         {
@@ -262,7 +263,7 @@ function endlessScrolling ()
           opacity:0.5
         });
     });
-    Ynode.all('.summary-item img').on('mouseleave', function(e)
+    $node.find('.summary-item img').on('mouseleave', function(e)
     {
       e.currentTarget.transition(
         {
