@@ -26,7 +26,7 @@ function endlessScrolling (config)
   var jsonAjax = config['jsonAjax'];
 
   // private
-  var thumbSize = 500; //px
+  var thumbSize = 500; //px // ideally this would be automatic and even change with resize
   var $parentToAppend;
   var $newItemToClone;
   var itemsLoaded = 0;
@@ -86,7 +86,6 @@ function endlessScrolling (config)
     .attr('src', '')
     .attr('data-src', '')
     .removeClass('positioned');
-//  thumbSize = $newItemToClone.find('img').attr('data-image-resolution').replace('w', '');
 
   $(container).first().css({
     'background-color': '#e8edf3',
