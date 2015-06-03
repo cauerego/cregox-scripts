@@ -6,9 +6,9 @@ function endlessScrolling ()
   // config
   var thumbSize = 300; //px
   var loadingMargin = 500; //px
-  var parent = 'main#main .wrapper';
   var list = '.summary-item-list';
   var post = '.summary-item';
+  var container = 'main#main .wrapper';
 
   // private
   var jsonCachedRequest = null;
@@ -40,8 +40,8 @@ function endlessScrolling ()
     pageId = undefined;
   }
 
-  $parentToAppend = $(parent).first().find('div');
   cacheAjaxRequest();
+  $parentToAppend = $(container).first().find('div');
   
   itemsLoaded = $parentToAppend.find('.summary-item-list .summary-item').length;
 
@@ -62,7 +62,7 @@ function endlessScrolling ()
     'position': ''
   }).addClass('endless-loading').parent().css({'text-align': 'center'});
   $loadingIcon.find('div.image-block-wrapper').first().css({'padding-bottom': 0});
-  $(parent).append($loadingIcon);
+  $(container).append($loadingIcon);
   
   $newItemToClone = $parentToAppend.find('.summary-item-list .summary-item').first().clone();
   $newItemToClone.addClass('cloned').hide();
@@ -72,7 +72,7 @@ function endlessScrolling ()
     .attr('data-src', '')
     .removeClass('positioned');
 
-  $(parent).first().css({
+  $(container).first().css({
     'background-color': '#e8edf3',
     'padding': '2em'
   });
@@ -130,7 +130,7 @@ function endlessScrolling ()
 
   function resetScrollingVars ()
   {
-    var parentChild = parent + '>div';
+    var parentChild = container + '>div';
     stuffBottom = $(parentChild).get('clientHeight') + $(parentChild).offset().top;
     
     var windowHeight = window.innerHeight
