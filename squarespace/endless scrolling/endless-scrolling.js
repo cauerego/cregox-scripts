@@ -26,7 +26,7 @@ function endlessScrolling (config)
   var jsonAjax = config['jsonAjax'];
 
   // private
-  var thumbSize = 500; //px // ideally this would be automatic and even change with resize
+  var thumbSize = 750; //px // ideally this would be automatic and even change with resize
   var $parentToAppend;
   var $newItemToClone;
   var itemsLoaded = 0;
