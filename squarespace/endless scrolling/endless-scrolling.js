@@ -1,6 +1,11 @@
 // initially based on a script from foley at
 // http://answers.squarespace.com/questions/17153/how-can-i-create-an-infinite-scroll-blog-on-the-developer-platform
 
+// this is still much based on squarespace and not fully abstracted away.
+
+///////////////////////
+
+// from http://stackoverflow.com/a/10939737/274502
 // loadScript('https://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.18/require.min.js', function() {
 //   console.log('require loaded'); // but too much bureaucracy to proceed from here
 // });
@@ -8,7 +13,6 @@ loadScript('https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js');
 loadScript('http://cdnjs.cloudflare.com/ajax/libs/masonry/3.3.0/masonry.pkgd.min.js');
 loadScript('https://cdn.rawgit.com/aFarkas/lazysizes/5b90f5591717cb1699347b69916b86b778d79fe6/lazysizes.min.js');
 loadScript('https://cdn.rawgit.com/desandro/imagesloaded/c0125592020bdbbb36f7506ea41dbdebad644a45/imagesloaded.pkgd.min.js');
-loadScript('https://cdn.rawgit.com/saarmstrong/5e8d2ac45dfd76a2574f/raw/33f805cd16b65403adc9ef33337068da72703508/jquery.getselector.js');
 
 function endlessScrolling (config)
 {
@@ -183,10 +187,6 @@ function endlessScrolling (config)
         .addClass('invisible')
         .removeClass('cloned');
 
-      if (onComplete)
-      {
-        onComplete( $newItem.getSelector() );
-      }
       $parentToAppend.find('.summary-item-list').first().append($newItem);
 
       var imgSize = json.items[i].originalSize;
@@ -227,6 +227,10 @@ function endlessScrolling (config)
       );
     }
 
+    if (onComplete !== undefined)
+    {
+       onComplete();
+    }
     $('footer#footer').show();
     createPageComplete = true;
 

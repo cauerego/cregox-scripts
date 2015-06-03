@@ -1,6 +1,6 @@
 <script src="https://cdn.rawgit.com/cregox/endless-scrolling/1.0/endless-scrolling.min.js"></script>
 
-<style>
+<style name="endless scrolling" author="cregox.com">
   .summary-item-list {
     display: none;
   }
@@ -39,8 +39,6 @@
         'jsonAjax': jsonAjax
       });
 
-      setMouseHover('main#main .wrapper div');
-
       function jsonAjax (ajaxString, callback)
       {
         var json;
@@ -62,10 +60,10 @@
       } // function cacheAjaxRequest
 
       // make it look like the original shop
-      function setMouseHover (node)
+      function setMouseHover ()
       {
-        var Ynode = Y.one(node);
-        Ynode.all('.summary-item img').on('mouseenter', function(e)
+        var Ynode = Y.all('main#main .wrapper div .summary-item a img');
+        Ynode.on('mouseenter', function(e)
         {
           e.currentTarget.transition(
             {
@@ -73,7 +71,7 @@
               opacity:0.5
             });
         });
-        Ynode.all('.summary-item img').on('mouseleave', function(e)
+        Ynode.on('mouseleave', function(e)
         {
           e.currentTarget.transition(
             {
