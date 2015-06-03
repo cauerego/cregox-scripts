@@ -7,8 +7,8 @@ function endlessScrolling ()
   var thumbSize = 300; //px
   var loadingMargin = 500; //px
   var list = '.summary-item-list';
-  var post = '.summary-item';
   var container = 'main#main .wrapper';
+  var item = '.summary-item';
 
   // private
   var jsonCachedRequest = null;
@@ -108,7 +108,7 @@ function endlessScrolling ()
         $parentToAppend.find('.summary-item-list .summary-item').removeClass('invisible');
         $loadingIcon.remove();
         var position = initialScrollPosition;
-        var $postPage = $(post+'#'+pageId).first();
+        var $postPage = $(item +'#'+ pageId).first();
         if ( $postPage && $postPage.offset() )
         {
           position = $postPage.offset().top;
