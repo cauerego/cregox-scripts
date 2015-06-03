@@ -1,17 +1,19 @@
 // initially based on a script from foley at
 // http://answers.squarespace.com/questions/17153/how-can-i-create-an-infinite-scroll-blog-on-the-developer-platform
 
-function endlessScrolling ()
+function endlessScrolling (config)
 {
   // config
-  var thumbSize = 300; //px
-  var loadingMargin = 500; //px
-  var list = '.summary-item-list';
-  var container = 'main#main .wrapper';
-  var item = '.summary-item';
+  var loadingMargin = config['loadingMargin'];
+  var container = config['container'];
+  var list = config['list'];
+  var item = config['item'];
+  var onComplete = config['onComplete'];
+  var ajaxString = config['ajaxString'];
+  var jsonAjax = config['jsonAjax'];
 
   // private
-  var jsonCachedRequest = null;
+  var thumbSize = 500; //px
   var $parentToAppend;
   var $newItemToClone;
   var itemsLoaded = 0;
@@ -40,8 +42,8 @@ function endlessScrolling ()
     pageId = undefined;
   }
 
-  cacheAjaxRequest();
   $parentToAppend = $(container).first().find('div');
+  jsonAjax(ajaxString, finishAjax);
   
   itemsLoaded = $parentToAppend.find('.summary-item-list .summary-item').length;
 
@@ -71,6 +73,7 @@ function endlessScrolling ()
     .attr('src', '')
     .attr('data-src', '')
     .removeClass('positioned');
+//  thumbSize = $newItemToClone.find('img').attr('data-image-resolution').replace('w', '');
 
   $(container).first().css({
     'background-color': '#e8edf3',
@@ -155,13 +158,11 @@ function endlessScrolling ()
     }
   }
 
-  function createLayout ()
+  function createLayout (json)
   {
-    if (jsonCachedRequest === null || createPageComplete) return false;
+    if (json === null || createPageComplete) return false;
 
     $loadingIcon.find('img').show();
-
-    var json = jsonCachedRequest;
 
     for (var i = itemsLoaded; i < totalItemsCount; i++)
     {
@@ -173,7 +174,10 @@ function endlessScrolling ()
         .addClass('invisible')
         .removeClass('cloned');
 
-      setMouseHover($newItem);
+      if (onComplete)
+      {
+        onComplete( $newItem.getSelector() );
+      }
       $parentToAppend.find('.summary-item-list').first().append($newItem);
 
       var imgSize = json.items[i].originalSize;
@@ -189,9 +193,11 @@ function endlessScrolling ()
         .attr('alt', '')
         .attr('data-src', json.items[i].assetUrl +'?format='+ thumbSize +'w')
         .attr('data-srcset',
-          json.items[i].assetUrl +'?format=100w 100w'
-          +','+ json.items[i].assetUrl +'?format=300w 300w'
-          +','+ json.items[i].assetUrl +'?format=500w 500w'
+          json.items[i].assetUrl +'?format=1500w 1500w'
+          +', '+ json.items[i].assetUrl +'?format=750w 750w'
+          +', '+ json.items[i].assetUrl +'?format=500w 500w'
+          +', '+ json.items[i].assetUrl +'?format=300w 300w'
+          +', '+ json.items[i].assetUrl +'?format=100w 100w'
         )
         //.getDOMNode().src = json.items[i].assetUrl +'?format=100w'
         .on('load', function()
@@ -217,60 +223,16 @@ function endlessScrolling ()
 
     return true;
   } // function createLayout
-
-//////////////
-// will remove all below here !!
-//////////////
-
-  function cacheAjaxRequest ()
+  
+  function finishAjax (json)
   {
-    if (jsonCachedRequest === null)
-    {
-      // ajax request
-      Y.io('/shop?format=json', {
-        on: {
-          success: function (x, o) {
-            try {
-              json = Y.JSON.parse(o.responseText);
-            } catch (e) {
-              console.log("JSON Parse failed!");
-              return;
-            }
+    totalItemsCount = json.items.length;
 
-            // when done loading json
+    resetScrollingVars();
 
-            jsonCachedRequest = json;
-            totalItemsCount = json.items.length;
+    Y.one('body').simulate('resize'); // adjust items in the columns
 
-            resetScrollingVars();
-
-            Y.one('body').simulate('resize'); // adjust items in the columns
-
-            createLayout();
-            loadMasonry();
-          }
-        }
-      });
-    }
-  } // function cacheAjaxRequest
-
-  function setMouseHover ($node)
-  {
-    $node.find('.summary-item img').on('mouseenter', function(e)
-    {
-      e.currentTarget.transition(
-        {
-          duration:0.5,
-          opacity:0.5
-        });
-    });
-    $node.find('.summary-item img').on('mouseleave', function(e)
-    {
-      e.currentTarget.transition(
-        {
-          duration:0.5,
-          opacity:1
-        });
-    });
-  } // function setMouseHover
+    createLayout(json);
+    loadMasonry();
+  }
 } // function endlessScrolling

@@ -38,50 +38,41 @@
 
       // settings
       endlessScrolling({
-        'thumbSize': 300,
+        'ajaxString': '/shop?format=json',
         'loadingMargin': 500,
         'container': 'main#main .wrapper',
+        'list': '.summary-item-list',
         'item': '.summary-item',
-        'onComplete': setMouseHover // how to send parameter?
+        'onComplete': setMouseHover,
+        'jsonAjax': jsonAjax
       });
 
-      setMouseHover( Y.one('main#main .wrapper div') );
+      setMouseHover('main#main .wrapper div');
 
-      function cacheAjaxRequest ()
+      function jsonAjax (ajaxString, callback)
       {
-        if (jsonCachedRequest === null)
-        {
-          // ajax request
-          Y.io('/shop?format=json', {
-            on: {
-              success: function (x, o) {
-                try {
-                  json = Y.JSON.parse(o.responseText);
-                } catch (e) {
-                  console.log("JSON Parse failed!");
-                  return;
-                }
-
-                // when done loading json
-
-                jsonCachedRequest = json;
-                totalItemsCount = json.items.length;
-
-                resetScrollingVars();
-
-                Y.one('body').simulate('resize'); // adjust items in the columns
-
-                createLayout();
-                loadMasonry();
+        var json;
+        Y.io(ajaxString, {
+          on: {
+            success: function (x, o) {
+              try {
+                json = Y.JSON.parse(o.responseText);
+              } catch (e) {
+                console.log("JSON Parse failed!");
+                return;
               }
+
+              // when done loading json
+              callback(json);
             }
-          });
-        }
+          }
+        });
       } // function cacheAjaxRequest
 
       // make it look like the original shop
-      function setMouseHover (Ynode)
+      function setMouseHover (node)
       {
+        var Ynode = Y.one(node);
         Ynode.all('.summary-item img').on('mouseenter', function(e)
         {
           e.currentTarget.transition(
@@ -101,4 +92,35 @@
       } // function setMouseHover
     })
   });
+  
+/*
+ *  jquery.getselector.js
+ *  
+ *  Get the CSS Selector string for a provided jQuery object.
+ * 
+ *  Based heavily on jquery-getpath (http://davecardwell.co.uk/javascript/jquery/plugins/jquery-getpath/),
+ *  and this xPath SO answer (http://stackoverflow.com/a/3454579).
+ * 
+ *  Usage: var select = $('#foo').getSelector();
+ */
+(function($){
+  $.fn.getSelector = function() {
+     element = this[0];
+     
+     // Get the xpath for this element.
+     // This was easier than calculating the DOM using jQuery, for now.
+     var xpath = '';
+     for ( ; element && element.nodeType == 1; element = element.parentNode ) {
+       var id = $(element.parentNode).children(element.tagName).index(element) + 1;
+       id > 1 ? (id = '[' + id + ']') : (id = '');
+       xpath = '/' + element.tagName.toLowerCase() + id + xpath;
+     }
+     
+     // Return CSS selector for the calculated xpath
+     return xpath
+             .substr(1)
+             .replace(/\//g, ' > ')
+             .replace(/\[(\d+)\]/g, function($0, i) { return ':nth-child('+i+')'; });
+  };
+})(window.jQuery);
 </script>
