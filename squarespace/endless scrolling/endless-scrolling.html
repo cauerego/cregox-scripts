@@ -1,13 +1,5 @@
 <script src="https://cdn.rawgit.com/cregox/endless-scrolling/1.0/endless-scrolling.min.js"></script>
 
-<!--
- remove includes from here, and into js
- http://stackoverflow.com/a/10939737/274502
--->
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
-<script src="http://cdnjs.cloudflare.com/ajax/libs/masonry/3.3.0/masonry.pkgd.min.js"></script>
-<script src="https://cdn.rawgit.com/desandro/imagesloaded/master/imagesloaded.pkgd.min.js"></script>
-<script src="https://cdn.rawgit.com/aFarkas/lazysizes/gh-pages/lazysizes.min.js"></script>
 <style>
   .summary-item-list {
     display: none;
@@ -92,35 +84,4 @@
       } // function setMouseHover
     })
   });
-  
-/*
- *  jquery.getselector.js
- *  
- *  Get the CSS Selector string for a provided jQuery object.
- * 
- *  Based heavily on jquery-getpath (http://davecardwell.co.uk/javascript/jquery/plugins/jquery-getpath/),
- *  and this xPath SO answer (http://stackoverflow.com/a/3454579).
- * 
- *  Usage: var select = $('#foo').getSelector();
- */
-(function($){
-  $.fn.getSelector = function() {
-     element = this[0];
-     
-     // Get the xpath for this element.
-     // This was easier than calculating the DOM using jQuery, for now.
-     var xpath = '';
-     for ( ; element && element.nodeType == 1; element = element.parentNode ) {
-       var id = $(element.parentNode).children(element.tagName).index(element) + 1;
-       id > 1 ? (id = '[' + id + ']') : (id = '');
-       xpath = '/' + element.tagName.toLowerCase() + id + xpath;
-     }
-     
-     // Return CSS selector for the calculated xpath
-     return xpath
-             .substr(1)
-             .replace(/\//g, ' > ')
-             .replace(/\[(\d+)\]/g, function($0, i) { return ':nth-child('+i+')'; });
-  };
-})(window.jQuery);
 </script>
