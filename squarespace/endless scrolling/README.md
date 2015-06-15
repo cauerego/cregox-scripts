@@ -1,3 +1,5 @@
+# Moved to https://github.com/cregox/endless-scrolling
+
 # endless scrolling
 Licensed under the LICENSE found at the root
 
