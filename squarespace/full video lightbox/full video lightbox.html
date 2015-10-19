@@ -1,14 +1,21 @@
 <script name="full video lightbox" author="cregox.com">
-  // to use it, create a gallery block, make it a grid and check the Lightbox.
-  // now add an item to it, either with the plus button or from another gallery.
-  // finally add a link to any block you want,
-  // calling jqueryLightbox function with a video url string.
-  // for instance, to a vimeo video:
-  // javascript:jqueryLightbox('video/127121696');
+  // to use this, make sure to follow all steps:
+  // 1. create a gallery block, make it a grid and check the Lightbox.
+  // 2. add an item to it, either with the plus button or from another gallery.
+  // 3. add a link to any block you want, and
+  //    call jqueryLightbox function with a video URL string.
+  //    for instance, to a vimeo video:
+  //    javascript:jqueryLightbox('video/127121696');
   //
-  // for more info, visit www.cregox.com/full-video
-  
+  // for more info, please visit www.cregox.com/full-video
+
   $(document).ready(function(){
+    if (window.top.document !== window.document)
+    { // if it's inside squarespace editor
+      return; // prevent function
+      // this makes it clearer the button needs a gallery and where it is
+      // else, galleries get hidden in editor until you edit the right block
+    }
     $('a[href^="javascript:jqueryLightbox("]').each(function(){
       var $videoButton = $(this);
       var videoString = $videoButton.attr('href').split("('")[1].split("')")[0];
@@ -23,11 +30,15 @@
       $videoButton.addClass('lightboxed');
     });
   });
-  
+
   function jqueryLightbox (videoString) {
     alert('jQuery not loaded');
-  }  
-  
+  }
+
+  // ----------------------
+  // from this point down, everything (including the style) is meant to simply make the video full screen
+  // ( but it won't remove the video controls (yet)! )
+
   var videoRatio = NaN;
   var $iframeVideo = null;
   $(document).bind('DOMSubtreeModified',function(){
