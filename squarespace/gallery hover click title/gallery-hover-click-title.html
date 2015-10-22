@@ -1,7 +1,4 @@
 <style>
-  .sqs-gallery-container {
-    display: none;
-  }
   .gallery-hover-click {
     color: grey;
   }
@@ -22,12 +19,13 @@
 
 <script name="gallery hover click" author="cregox.com">
   var $galleryClickVisible = null;
-  
+
+  var $titleGallery = $('span.gallery-hover-click').parents('.sqs-block-code').hide()
+    .map(function(){
+      return $(this).below('.sqs-block-gallery .sqs-gallery')[0];
+    });
+
   $(window).load(function(){
-    var $titleGallery = $('span.gallery-hover-click').parents('.sqs-block-code').hide()
-      .map(function(){
-        return $(this).below('.sqs-block-gallery .sqs-gallery')[0];
-      });
     var $galleryStyle = $('span#gallery-hover-click-styles');
 
     var $bgOver = $('#gallery-background-overlay');
@@ -65,14 +63,14 @@
           $bgOver.show();
         }
       });
-      
+
       $galClick.click(function(){
         $galClick.hide('fast');
         $galleryClickVisible = null;
         $bgOver.hide();
       });
     }); // each image-wrapper
-    
+
     /* out for now, using CSS and static files
     $.fn.awesomeCursor.defaults.color = 'black';
     $.fn.awesomeCursor.defaults.outline = 'white';
@@ -81,9 +79,6 @@
     $('.click').awesomeCursor('times');
     $('#gallery-background-overlay').awesomeCursor('times');
     */
-    
-    // after everything is done here, it might be a good idea to show what have been previously hidden by css, just in case
-    $('.sqs-gallery-container').show();
-    
+
   }); // window load
 </script>
